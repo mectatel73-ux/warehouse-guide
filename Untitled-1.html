@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Справочник сотрудника склада | Магнит Маркет</title>
+    
+    <!-- PWA / Web App -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Магнит Маркет">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#1b4f72">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f4f7fc;
+            color: #1e2a3a;
+            line-height: 1.5;
+            padding-bottom: 70px;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #0b3b5f, #1b4f72);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+        .sticky-header.hidden { transform: translateY(-100%); }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sticky-header h1 {
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+        .sticky-header p { opacity: 0.9; font-size: 0.85rem; margin-top: 4px; }
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            background: white;
+            border-radius: 48px;
+            padding: 0.2rem 0.2rem 0.2rem 1rem;
+            min-width: 240px;
+        }
+        .search-bar i { color: #1b4f72; align-self: center; }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
+            outline: none;
+            background: transparent;
+        }
+        .search-bar button {
+            background: #ff8c42;
+            border: none;
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+            gap: 2rem;
+        }
+        .sidebar {
+            flex: 1;
+            min-width: 240px;
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            border-left: 4px solid #ff8c42;
+            padding-left: 12px;
+        }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin: 0.7rem 0; }
+        .sidebar a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .sidebar a:hover { color: #ff8c42; transform: translateX(4px); }
+        .content {
+            flex: 3;
+            background: white;
+            border-radius: 24px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            min-height: 400px;
+        }
+        .card {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1.5rem;
+            scroll-margin-top: 80px;
+        }
+        .card:last-child { border-bottom: none; }
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: #0b3b5f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card ul, .card ol { margin-left: 1.8rem; margin-bottom: 1rem; }
+        .note {
+            background: #fff8e7;
+            border-left: 4px solid #ffb347;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            margin: 0.8rem 0;
+        }
+        .highlight { background-color: #fff1b5; }
+        footer {
+            text-align: center;
+            margin: 2rem 0 0;
+            font-size: 0.8rem;
+            color: #6c7a89;
+        }
+
+        /* === НИЖНЕЕ МЕНЮ === */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 16px;
+            border-top: 1px solid #e0e7ed;
+            z-index: 200;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 32px;
+            transition: 0.2s;
+            font-size: 0.75rem;
+            color: #5a6e7a;
+            font-weight: 500;
+        }
+        .nav-item i { font-size: 1.4rem; color: #1b4f72; }
+        .nav-item span { font-size: 0.7rem; }
+        .nav-item:hover { background: #eef2f8; }
+        .nav-item.active { background: #e3f2fd; color: #0d47a1; }
+        .nav-item.active i { color: #0d47a1; }
+
+        /* === СТИЛИ ДЛЯ НОВОВВЕДЕНИЙ === */
+        .novelties-container { padding: 0; }
+        .novelties-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #1976D2;
+        }
+        .novelties-header i { font-size: 1.8rem; color: #1976D2; }
+        .novelties-header h2 { margin: 0; color: #0d47a1; font-size: 1.5rem; }
+        .novelty-card {
+            background: #f8fbff;
+            border-left: 4px solid #1976D2;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            transition: 0.2s;
+        }
+        .novelty-card:hover { box-shadow: 0 2px 8px rgba(25,118,210,0.15); }
+        .novelty-date {
+            font-size: 0.8rem;
+            color: #1976D2;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .novelty-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #1a237e;
+            margin-bottom: 0.3rem;
+        }
+        .novelty-desc {
+            font-size: 0.9rem;
+            color: #444;
+            line-height: 1.5;
+        }
+        .novelty-badge {
+            display: inline-block;
+            background: #c8e6c9;
+            color: #2e7d32;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .novelties-footer {
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #e0e0e0;
+            text-align: right;
+            font-size: 0.75rem;
+            color: #999;
+        }
+        .novelties-loading, .novelties-error, .novelties-empty {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        .novelties-error { color: #d32f2f; }
+
+        /* === СТИЛИ ДЛЯ СТОП-ЗОН === */
+        .stopzones-container { padding: 0; }
+        .stopzones-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #d32f2f;
+        }
+        .stopzones-header i { font-size: 1.8rem; color: #d32f2f; }
+        .stopzones-header h2 { margin: 0; color: #b71c1c; font-size: 1.5rem; }
+        .stopzone-alert {
+            background: #fff3e0;
+            border-left: 4px solid #ff6f00;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #e65100;
+        }
+        .stopzone-floor {
+            background: #fafafa;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        .stopzone-floor-title {
+            background: #c62828;
+            color: white;
+            padding: 0.6rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .stopzone-list {
+            padding: 0.5rem 1rem;
+        }
+        .stopzone-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.85rem;
+        }
+        .stopzone-item:last-child { border-bottom: none; }
+        .stopzone-zone { font-family: monospace; font-weight: 600; color: #333; }
+        .stopzone-reason { color: #c62828; font-weight: 500; font-size: 0.8rem; }
+
+        @media (max-width: 800px) {
+            .container { flex-direction: column; margin-top: 1rem; }
+            .sidebar { position: static; margin-bottom: 1rem; }
+            .sticky-header h1 { font-size: 1.1rem; }
+            .search-bar { min-width: auto; width: 100%; }
+            .header-content { flex-direction: column; align-items: stretch; }
+            .content { padding: 1rem; }
+            .card h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Шапка -->
+<header class="sticky-header" id="stickyHeader">
+    <div class="header-content">
+        <div>
+            <h1><i class="fas fa-warehouse"></i> Справочник сотрудника склада</h1>
+            <p>Магнит Маркет — регламент размещения, хранения и безопасности товара</p>
+        </div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Поиск (полка, сейф, одежда)...">
+            <button id="searchBtn">Найти</button>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Сайдбар (только для регламентов) -->
+    <div class="sidebar" id="sidebarContainer">
+        <h3><i class="fas fa-list-ul"></i> Содержание</h3>
+        <ul id="tableOfContents"></ul>
+    </div>
+    
+    <!-- Основной контент -->
+    <div class="content" id="contentArea"></div>
+</div>
+
+<footer>
+    <i class="fas fa-sync-alt"></i> Версия 1.0 · При обнаружении ошибок сообщите старшему смены
+</footer>
+
+<!-- Нижнее меню -->
+<div class="bottom-nav">
+    <button class="nav-item active" data-tab="regulations">
+        <i class="fas fa-book-open"></i>
+        <span>Регламенты</span>
+    </button>
+    <button class="nav-item" data-tab="stopzones">
+        <i class="fas fa-stop-circle"></i>
+        <span>Стоп-зоны</span>
+    </button>
+    <button class="nav-item" data-tab="novelties">
+        <i class="fas fa-newspaper"></i>
+        <span>Нововведения</span>
+    </button>
+</div>
+
+<script>
+    // ==========================================
+    // ДАННЫЕ РЕГЛАМЕНТОВ
+    // ==========================================
+    const sections = [
+        { id: "welcome", title: "🏠 Введение", content: `<p>Данный регламент описывает требования по размещению и хранению товара на складе Магнит Маркет, с целью увеличения скорости сборки и снижения рисков потери и повреждения товара.</p><p>Товар должен быть расположен по ячейкам хранения так, чтобы в дальнейшем не пришлось изыскивать дополнительных площадей. Рабочее пространство не должно быть захламлено.</p>` },
+        { id: "rule-scan-zone", title: "📱 1.1 Сканирование зоны работы", content: `<p><strong>Для начала размещения необходимо:</strong></p><ul><li>Зайти в программу «PickApp»</li><li>Отсканировать зону работы</li><li>Отсканировать штрихкод грузоместа или акта целиком</li></ul>` },
+        { id: "rule-scan-sku", title: "📦 1.2 Сканирование SKU и ячейки", content: `<p>После сканирования зоны:</p><ul><li>Отсканируйте штрихкод (SKU) товара</li><li>Укажите количество</li><li>Отсканируйте ячейку</li></ul><p>Вы можете посмотреть список товаров, которые разместили или осталось разместить.</p>` },
+        { id: "rule-check", title: "🔍 1.3 Сверка ШК и пересчёт", content: `<p>Перед размещением товар проходит процедуру пересчёта.<br>✅ <strong>Сверка ШК товара с Актом приема-передачи ОБЯЗАТЕЛЬНА.</strong></p>` },
+        { id: "rule-packing", title: "🧱 1.4 Требования к упаковке", content: `<ul><li>Сыпучие, острые, магнитные товары — в плотной упаковке</li><li>Жидкие — вертикально</li><li>Хрупкие — строго в индивидуальной упаковке</li><li>Тяжелые — в нижние ячейки, легкие — в верхние</li><li>ШК должен быть виден</li><li>Размещать согласно габаритам: мелко-, средне-, крупногабаритные ячейки</li></ul>` },
+        { id: "floors", title: "🏢 2. Этажи склада", content: `<ul><li><strong>1 этаж:</strong> сыпучие, жидкие, тяжёлые, нестандартные (по согласованию)</li><li><strong>2 этаж:</strong> крупногабарит (>13 701 см³)</li><li><strong>3 этаж:</strong> Сейф + ЭКО</li><li><strong>4–6 этажи:</strong> остальные категории</li></ul>` },
+        { id: "shelf-1", title: "🟦 3.1 Первая полка", content: `<p>Крупногабарит: 3420 – 13700 см³. Также обувь.<br>Допускается деление товара на несколько ячеек при личном пересчете.</p>` },
+        { id: "shelf-2", title: "👕 3.2 Вторая полка", content: `<p><strong>ТОЛЬКО Одежда и Обувь.</strong> Другой товар ЗАПРЕЩЁН!</p>` },
+        { id: "shelf-3", title: "🟩 3.3 Третья полка", content: `<p>Небольшие товары: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть пластиковый короб — ТОЛЬКО мелкоштучный товар.</p>` },
+        { id: "shelf-4", title: "🟨 3.4 Четвертая полка", content: `<p>Мелкоштучный товар: 0 – 170 см³, макс. сторона ≤15 см. В пластиковые короба.</p>` },
+        { id: "shelf-5", title: "🟧 3.5 Пятая полка", content: `<p>Как третья полка: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть короб — ТОЛЬКО мелкоштучный товар.</p>` },
+        { id: "shelf-6", title: "🟥 3.6 Шестая полка", content: `<p>Товары: 1001 – 3419 см³, вес ≤3 кг, макс. сторона ≤40 см.<br>Также: обувь, верхняя одежда.<br>⚖️ Тяжёлые — по краям, лёгкие — в центр. Общий вес ≤35 кг.</p>` },
+        { id: "forbidden", title: "⛔ 4. Строго запрещено", content: `<ul><li>2 одинаковых товара с разными ШК в одной ячейке</li><li>Товар в коробке (вынимать по возможности)</li><li>В пакетах, резинках, с накладной</li><li>Крупный сверху на мелкий</li><li>Вторым рядом</li><li>Поверх уже существующего</li><li>>35 кг на полку</li><li>Тяжёлый в центр</li><li>Без упаковки / повреждённая упаковка</li><li>Скользкие друг на друга</li></ul>` },
+        { id: "large-size", title: "🖼️ 5. Крупногабаритный товар", content: `<p>2 этаж: >13 701 см³ или сторона >40 см.<br>Также: Картины, Холсты, Автоковры, Телевизоры.<br>❗ Картины и холсты — строго вертикально, ШК к проходу. Если невозможно — обратиться к ст. специалисту.</p>` },
+        { id: "pallet", title: "🚜 6. Поддонное размещение", content: `<p>Допускается для больших партий или крупногабарита.</p><p><strong>Запрещено:</strong></p><ul><li>>1 поддона в ячейку</li><li>Складирование друг на друга</li><li>>4 наименований на поддон</li><li>Высота >160 см</li></ul>` },
+        { id: "safe", title: "🔒 7. Сейфовое размещение", content: `<p><strong>Только ответственные сотрудники с допуском Face ID.</strong></p><p>Категории товаров в сейф:</p><ul><li>Смартфоны, гаджеты от 500 руб.</li><li>Фото/видео техника от 500 руб.</li><li>Консоли, наушники от 1000 руб.</li><li>Оргтехника от 2000 руб.</li><li>Power Bank, флешки от 1000 руб.</li><li>Зажигалки (кроме кухонных пустых)</li><li>Часы, бижутерия от 500 руб.</li><li>Парфюм от 5000 руб.</li><li>Инструменты от 5000 руб.</li><li>Одежда от 1000–1500 руб. (ALGA — вся)</li><li>Обувь от 1500 руб. или в коробках</li><li>Фены от 15 000 руб.</li><li>Ножи (кроме канцелярских)</li><li>Пневматика, арбалеты, луки</li><li>Автоаксессуары от 1500 руб.</li><li>Сертификаты, сим-карты, монеты — НЕЗАВИСИМО от стоимости</li></ul>` },
+        { id: "dangerous", title: "☣️ 8. Потенциально опасные товары", content: `<div class="note"><i class="fas fa-skull-crossbones"></i> <strong>Опасные грузы:</strong> правила обращения с ними выдаются руководителем смены.<br><ul><li>Легковоспламеняющиеся жидкости (лаки, растворители)</li><li>Едкие вещества (кислоты, щёлочи)</li><li>Газовые баллончики (спреи, аэрозоли)</li></ul>⚠️ <strong>Запрещено размещение вместе с обычными товарами без спецмаркировки.</strong></div>` }
+    ];
+
+    // ==========================================
+    // URL ДЛЯ ЗАГРУЗКИ
+    // ==========================================
+    const NOVELTIES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
+    const STOPZONES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
+
+    let currentTab = 'regulations';
+
+    // ==========================================
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ==========================================
+    function stripHtml(html) {
+        let tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || '';
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m] || m);
+    }
+
+    function formatTime(date) {
+        return date.toLocaleString('ru-RU', { 
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
+
+    // ==========================================
+    // ОТРИСОВКА РЕГЛАМЕНТОВ
+    // ==========================================
+    function renderRegulations() {
+        const container = document.getElementById('contentArea');
+        const sidebar = document.getElementById('sidebarContainer');
+        sidebar.style.display = 'block';
+        container.innerHTML = '';
+        
+        sections.forEach(section => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.id = section.id;
+            card.setAttribute('data-fulltext', (section.title + ' ' + stripHtml(section.content)).toLowerCase());
+            card.innerHTML = `<h2>${section.title}</h2>${section.content}`;
+            container.appendChild(card);
+        });
+        
+        buildTOC();
+    }
+
+    function buildTOC() {
+        const tocList = document.getElementById('tableOfContents');
+        tocList.innerHTML = '';
+        sections.forEach(section => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '#';
+            a.textContent = section.title;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                const el = document.getElementById(section.id);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            });
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
+    }
+
+    // ==========================================
+    // ОТРИСОВКА НОВОВВЕДЕНИЙ
+    // ==========================================
+    async function renderNovelties() {
+        const container = document.getElementById('contentArea');
+        const sidebar = document.getElementById('sidebarContainer');
+        sidebar.style.display = 'none';
+        
+        container.innerHTML = `
+            <div class="novelties-container">
+                <div class="novelties-header">
+                    <i class="fas fa-newspaper"></i>
+                    <h2>🆕 Нововведения</h2>
+                </div>
+                <p style="color:#666; margin-bottom:1rem;">Актуальные изменения для сотрудников. Обновляется автоматически.</p>
+                <div id="novelties-content">
+                    <div class="novelties-loading">⏳ Загрузка нововведений...</div>
+                </div>
+                <div id="novelties-footer" class="novelties-footer"></div>
+            </div>
+        `;
+        
+        await loadNoveltiesData();
+    }
+
+    async function loadNoveltiesData() {
+        const contentDiv = document.getElementById('novelties-content');
+        const footerDiv = document.getElementById('novelties-footer');
+        if (!contentDiv) return;
+        
+        try {
+            const response = await fetch(NOVELTIES_URL);
+            if (!response.ok) throw new Error('Ошибка загрузки');
+            
+            const tsvText = await response.text();
+            const rows = tsvText.trim().split('\n').filter(r => r.trim());
+            
+            if (rows.length < 2) {
+                contentDiv.innerHTML = '<div class="novelties-empty">📭 Нововведений пока нет</div>';
+                footerDiv.textContent = 'Проверено: ' + formatTime(new Date());
+                return;
+            }
+            
+            const dataRows = rows.slice(1);
+            
+            // Фильтруем только актуальные
+            const activeRows = dataRows.filter(row => {
+                const cols = row.split('\t');
+                const status = (cols[3] || '').trim().toLowerCase();
+                return status === 'актуально' || status === 'актуальная' || status === 'новое';
+            });
+            
+            if (activeRows.length === 0) {
+                contentDiv.innerHTML = '<div class="novelties-empty">✅ Все нововведения обработаны. Актуальных нет.</div>';
+                footerDiv.textContent = 'Обновлено: ' + formatTime(new Date());
+                return;
+            }
+            
+            let html = '';
+            activeRows.forEach(row => {
+                const cols = row.split('\t');
+                if (cols.length < 3) return;
+                const date = cols[0]?.trim() || '';
+                const title = cols[1]?.trim() || '';
+                const desc = cols[2]?.trim() || '';
+                const status = cols[3]?.trim() || 'Актуально';
+                
+                html += `
+                    <div class="novelty-card">
+                        <div class="novelty-date">📅 ${escapeHtml(date)}</div>
+                        <div class="novelty-title">${escapeHtml(title)}</div>
+                        <div class="novelty-desc">${escapeHtml(desc)}</div>
+                        <span class="novelty-badge">${escapeHtml(status)}</span>
+                    </div>
+                `;
+            });
+            
+            contentDiv.innerHTML = html;
+            footerDiv.textContent = '🔄 Обновлено: ' + formatTime(new Date());
+            
+        } catch (error) {
+            console.error('Ошибка нововведений:', error);
+            contentDiv.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки. Проверьте подключение.</div>';
+            footerDiv.textContent = '';
+        }
+    }
+
+    // ==========================================
+    // ОТРИСОВКА СТОП-ЗОН
+    // ==========================================
+    async function renderStopZones() {
+        const container = document.getElementById('contentArea');
+        const sidebar = document.getElementById('sidebarContainer');
+        sidebar.style.display = 'none';
+        
+        container.innerHTML = `
+            <div class="stopzones-container">
+                <div class="stopzones-header">
+                    <i class="fas fa-stop-circle"></i>
+                    <h2>🚫 Стоп-зоны склада</h2>
+                </div>
+                <div class="stopzone-alert">
+                    ⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.
+                </div>
+                <div id="stopzones-content">
+                    <div class="novelties-loading">⏳ Загрузка стоп-зон...</div>
+                </div>
+                <div id="stopzones-footer" class="novelties-footer"></div>
+            </div>
+        `;
+        
+        await loadStopZonesData();
+    }
+
+    async function loadStopZonesData() {
+        const contentDiv = document.getElementById('stopzones-content');
+        const footerDiv = document.getElementById('stopzones-footer');
+        if (!contentDiv) return;
+        
+        try {
+            const response = await fetch(STOPZONES_URL);
+            if (!response.ok) throw new Error('Ошибка загрузки');
+            
+            const tsvText = await response.text();
+            const rows = tsvText.trim().split('\n').filter(r => r.trim());
+            
+            if (rows.length < 2) {
+                contentDiv.innerHTML = '<div class="novelties-empty">📭 Стоп-зон нет</div>';
+                footerDiv.textContent = 'Проверено: ' + formatTime(new Date());
+                return;
+            }
+            
+            const dataRows = rows.slice(1);
+            const floors = {};
+            let currentFloor = null;
+            
+            dataRows.forEach(row => {
+                const cols = row.split('\t');
+                const firstCell = (cols[0] || '').trim();
+                const secondCell = (cols[1] || '').trim();
+                
+                if (!firstCell) return;
+                
+                const isFloor = firstCell.toLowerCase().includes('этаж') || 
+                               firstCell.toLowerCase().includes('поддон');
+                
+                if (isFloor) {
+                    currentFloor = firstCell;
+                    if (!floors[currentFloor]) {
+                        floors[currentFloor] = { name: firstCell, zones: [] };
+                    }
+                } else if (currentFloor) {
+                    floors[currentFloor].zones.push({
+                        zone: firstCell,
+                        reason: secondCell || 'Стоп размещение'
+                    });
+                }
+            });
+            
+            const floorKeys = Object.keys(floors).filter(k => floors[k].zones.length > 0);
+            
+            if (floorKeys.length === 0) {
+                contentDiv.innerHTML = '<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны для размещения.</div>';
+                footerDiv.textContent = 'Обновлено: ' + formatTime(new Date());
+                return;
+            }
+            
+            let html = '';
+            floorKeys.forEach(key => {
+                const floor = floors[key];
+                html += `<div class="stopzone-floor">
+                    <div class="stopzone-floor-title">📍 ${escapeHtml(floor.name)}</div>
+                    <div class="stopzone-list">`;
+                
+                floor.zones.forEach(z => {
+                    html += `<div class="stopzone-item">
+                        <span class="stopzone-zone">${escapeHtml(z.zone)}</span>
+                        <span class="stopzone-reason">${escapeHtml(z.reason)}</span>
+                    </div>`;
+                });
+                
+                html += `</div></div>`;
+            });
+            
+            contentDiv.innerHTML = html;
+            footerDiv.textContent = '🔄 Обновлено: ' + formatTime(new Date());
+            
+        } catch (error) {
+            console.error('Ошибка стоп-зон:', error);
+            contentDiv.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки стоп-зон.</div>';
+            footerDiv.textContent = '';
+        }
+    }
+
+    // ==========================================
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+    // ==========================================
+    function switchTab(tabName) {
+        currentTab = tabName;
+        
+        // Обновляем активную кнопку
+        document.querySelectorAll('.nav-item').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-tab') === tabName) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Показываем нужный контент
+        if (tabName === 'regulations') {
+            renderRegulations();
+        } else if (tabName === 'novelties') {
+            renderNovelties();
+        } else if (tabName === 'stopzones') {
+            renderStopZones();
+        }
+    }
+
+    // ==========================================
+    // ПОИСК (только для регламентов)
+    // ==========================================
+    function performSearch() {
+        if (currentTab !== 'regulations') {
+            switchTab('regulations');
+            setTimeout(() => performSearch(), 300);
+            return;
+        }
+        
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const cards = document.querySelectorAll('.card');
+        const oldMsg = document.getElementById('noResultsMsg');
+        if (oldMsg) oldMsg.remove();
+
+        cards.forEach(card => {
+            card.querySelectorAll('.highlight').forEach(mark => {
+                const parent = mark.parentNode;
+                parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                parent.normalize();
+            });
+        });
+
+        if (!query) {
+            cards.forEach(card => card.style.display = 'block');
+            return;
+        }
+
+        let foundAny = false;
+        cards.forEach(card => {
+            const fullText = card.getAttribute('data-fulltext') || '';
+            if (fullText.includes(query)) {
+                card.style.display = 'block';
+                highlightInCard(card, query);
+                foundAny = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (!foundAny) {
+            const msg = document.createElement('div');
+            msg.id = 'noResultsMsg';
+            msg.className = 'note';
+            msg.style.textAlign = 'center';
+            msg.innerHTML = '<i class="fas fa-search-minus"></i> Ничего не найдено.';
+            document.getElementById('contentArea').appendChild(msg);
+        }
+    }
+
+    function highlightInCard(card, query) {
+        const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, {
+            acceptNode: node => {
+                if (node.parentElement?.tagName === 'SCRIPT' || 
+                    node.parentElement?.tagName === 'STYLE' || 
+                    node.parentElement?.tagName === 'MARK') return NodeFilter.FILTER_REJECT;
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        });
+        
+        const nodesToReplace = [];
+        while (walker.nextNode()) {
+            if (walker.currentNode.textContent.toLowerCase().includes(query)) {
+                nodesToReplace.push(walker.currentNode);
+            }
+        }
+        
+        nodesToReplace.forEach(node => {
+            const span = document.createElement('span');
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            span.innerHTML = node.textContent.replace(regex, '<mark class="highlight">$1</mark>');
+            node.parentNode.replaceChild(span, node);
+        });
+    }
+
+    // ==========================================
+    // ИНИЦИАЛИЗАЦИЯ
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+        // Первая загрузка — регламенты
+        switchTab('regulations');
+        
+        // Кнопки нижнего меню
+        document.querySelectorAll('.nav-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.getAttribute('data-tab');
+                if (tab) switchTab(tab);
+            });
+        });
+        
+        // Поиск
+        document.getElementById('searchBtn').addEventListener('click', performSearch);
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+        
+        // Скрытие шапки при скролле
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const header = document.getElementById('stickyHeader');
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+            lastScrollY = currentScrollY;
+        });
+        
+        // Автообновление каждые 5 минут
+        setInterval(() => {
+            if (currentTab === 'novelties') loadNoveltiesData();
+            if (currentTab === 'stopzones') loadStopZonesData();
+        }, 5 * 60 * 1000);
+    });
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('SW registered'))
+            .catch(err => console.log('SW error:', err));
+    }
+</script>
+</body>
+</html>
