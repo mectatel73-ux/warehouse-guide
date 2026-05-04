@@ -1,0 +1,10 @@
+{
+  "name": "Магнит Маркет Справочник",
+  "short_name": "Склад ММ",
+  "description": "Справочник сотрудника склада",
+  "start_url": "/warehouse-guide/",
+  "display": "standalone",
+  "background_color": "#1b4f72",
+  "theme_color": "#1b4f72",
+  "icons": []
+}
