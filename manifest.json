@@ -8,15 +8,15 @@
   "theme_color": "#c41e1e",
   "icons": [
     {
-      "src": "1777931118.png",
+      "src": "МАГНИТОТД_1.jpeg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "1777931118.png",
+      "src": "МАГНИТОТД_1.jpeg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ]
