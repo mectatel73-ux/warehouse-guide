@@ -39,7 +39,10 @@
         .note{background:#fff5f5;border-left:4px solid #e63946;padding:.8rem 1rem;border-radius:12px;margin:.8rem 0}
         .highlight{background-color:#ffd4d4;padding:2px 4px;border-radius:4px}
         .photo-gallery{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
-        .photo-gallery img{max-width:280px;width:100%;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;transition:transform .2s}
+        ..photo-gallery img{max-width:280px;width:100%;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;transition:transform .2s;display:block}
+.photo-gallery img[src=""]{display:none}
+.photo-gallery img:not([src]),.photo-gallery img[src=""]{display:none}
+.photo-gallery img:error{display:none}
         .photo-gallery img:hover{transform:scale(1.02)}
         footer{text-align:center;margin:2rem 0 0;font-size:.8rem;color:#8a6e6e}
         .bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);box-shadow:0 -4px 12px rgba(180,30,30,.08);display:flex;justify-content:space-around;align-items:center;padding:8px 16px;border-top:1px solid #f5e5e5;z-index:200}
@@ -79,6 +82,18 @@
         .stopzone-reason{color:#c41e1e;font-weight:500;font-size:.8rem}
         @media(max-width:800px){.container{flex-direction:column;margin-top:1rem}.sidebar{position:static;margin-bottom:1rem}.sticky-header h1{font-size:1.1rem}.search-bar{min-width:auto;width:100%}.header-content{flex-direction:column;align-items:stretch}.content{padding:1rem}.card h2{font-size:1.3rem}.photo-gallery img{max-width:100%}}
     </style>
+    <script>
+window.addEventListener('load',function(){
+    document.querySelectorAll('img').forEach(function(img){
+        if(img.naturalWidth===0&&img.naturalHeight===0){
+            img.style.display='none';
+        }
+        img.addEventListener('error',function(){
+            img.style.display='none';
+        });
+    });
+});
+</script>
 </head>
 <body>
 <div id="splash-screen">
