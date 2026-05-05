@@ -113,7 +113,7 @@
     <button class="nav-item" data-tab="novelties"><i class="fas fa-newspaper"></i><span>Нововведения</span></button>
 </div>
 <script>
-const sections=[
+var sections=[
     {id:"welcome",title:"🏠 Введение",content:'<p>Данный регламент описывает требования по размещению и хранению товара на складе Магнит Маркет, с целью увеличения скорости сборки и снижения рисков потери и повреждения товара.</p><p>Товар должен быть расположен по ячейкам хранения так, чтобы в дальнейшем не пришлось изыскивать дополнительных площадей. Рабочее пространство не должно быть захламлено.</p>'},
     {id:"rule-scan-zone",title:"📱 1.1 Сканирование зоны работы",content:'<p><strong>Для начала размещения необходимо:</strong></p><ul><li>Зайти в программу «PickApp»</li><li>Отсканировать зону работы</li><li>Отсканировать штрихкод грузоместа или акта целиком</li></ul><div class="photo-gallery"><img src="1.1.jpg" alt="1"><img src="1.1 (2).jpg" alt="2"><img src="1.1 (3).jpg" alt="3"><img src="1.1 (4).jpg" alt="4"></div>'},
     {id:"rule-scan-sku",title:"📦 1.2 Сканирование SKU и ячейки",content:'<p>После сканирования зоны:</p><ul><li>Отсканируйте штрихкод (SKU) товара</li><li>Укажите количество</li><li>Отсканируйте ячейку</li></ul><p>Вы можете посмотреть список товаров, которые разместили или осталось разместить.</p><div class="photo-gallery"><img src="1.2.jpg" alt="1"><img src="1.2 (2).jpg" alt="2"><img src="1.2 (3).jpg" alt="3"><img src="1.2 (5).jpg" alt="5"></div>'},
@@ -131,17 +131,17 @@ const sections=[
     {id:"pallet",title:"🚜 6. Поддонное размещение",content:'<p>Допускается для больших партий.</p><p><strong>Запрещено:</strong></p><ul><li>>1 поддона в ячейку</li><li>Складирование друг на друга</li><li>>4 наименований</li><li>Высота >160 см</li></ul><div class="photo-gallery"><img src="Поддонка 1.jpg" alt="1"><img src="Поддонка 2.jpg" alt="2"></div>'},
     {id:"safe",title:"🔒 7. Сейфовое размещение",content:'<p><strong>Только с Face ID.</strong></p><p>Категории:</p><ul><li>Смартфоны, гаджеты от 500₽</li><li>Фото/видео от 500₽</li><li>Консоли, наушники от 1000₽</li><li>Оргтехника от 2000₽</li><li>Power Bank, флешки от 1000₽</li><li>Зажигалки (кроме пустых)</li><li>Часы, бижутерия от 500₽</li><li>Парфюм от 5000₽</li><li>Инструменты от 5000₽</li><li>Одежда от 1000₽</li><li>Обувь от 1500₽</li><li>Фены от 15000₽</li><li>Ножи, пневматика</li><li>Сертификаты, сим-карты, монеты — всегда</li></ul><div class="photo-gallery"><img src="СейфFaceID 1.jpg" alt="1"><img src="СейфFaceID 2.jpg" alt="2"></div>'},
     {id:"dangerous",title:"☣️ 8. Потенциально опасные товары",content:'<div class="note"><i class="fas fa-skull-crossbones"></i> <strong>Опасные грузы:</strong><br><ul><li>Легковоспламеняющиеся жидкости</li><li>Едкие вещества</li><li>Газовые баллончики</li></ul>⚠️ Запрещено с обычными товарами без спецмаркировки.</div><div class="photo-gallery"><img src="ГСМ.jpg" alt="ГСМ"></div>'}
-];const NOVELTIES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
-const STOPZONES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
-let currentTab='regulations';
-function stripHtml(h){let d=document.createElement('div');d.innerHTML=h;return d.textContent||''}
-function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m])}
+];var NOVELTIES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
+var STOPZONES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
+var currentTab='regulations';
+function stripHtml(h){var d=document.createElement('div');d.innerHTML=h;return d.textContent||''}
+function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,function(m){return({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]})}
 function formatTime(d){return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
 function renderRegulations(){
     document.getElementById('sidebarContainer').style.display='block';
-    let c=document.getElementById('contentArea');c.innerHTML='';
-    sections.forEach(s=>{
-        let card=document.createElement('div');card.className='card';card.id=s.id;
+    var c=document.getElementById('contentArea');c.innerHTML='';
+    sections.forEach(function(s){
+        var card=document.createElement('div');card.className='card';card.id=s.id;
         card.setAttribute('data-fulltext',(s.title+' '+stripHtml(s.content)).toLowerCase());
         card.innerHTML='<h2>'+s.title+'</h2>'+s.content;
         c.appendChild(card);
@@ -149,35 +149,43 @@ function renderRegulations(){
     buildTOC();
 }
 function buildTOC(){
-    let l=document.getElementById('tableOfContents');l.innerHTML='';
-    sections.forEach(s=>{
-        let li=document.createElement('li'),a=document.createElement('a');
+    var l=document.getElementById('tableOfContents');l.innerHTML='';
+    sections.forEach(function(s){
+        var li=document.createElement('li'),a=document.createElement('a');
         a.href='#';a.textContent=s.title;
-        a.addEventListener('click',e=>{e.preventDefault();document.getElementById(s.id)?.scrollIntoView({behavior:'smooth'})});
+        a.addEventListener('click',function(e){e.preventDefault();document.getElementById(s.id)?.scrollIntoView({behavior:'smooth'})});
         li.appendChild(a);l.appendChild(li);
     });
 }
 async function renderNovelties(){
     document.getElementById('sidebarContainer').style.display='none';
-    document.getElementById('contentArea').innerHTML='<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения для сотрудников. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>';
+    document.getElementById('contentArea').innerHTML='<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения для сотрудников.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>';
     await loadNoveltiesData();
 }
 async function loadNoveltiesData(){
-    let cd=document.getElementById('novelties-content'),fd=document.getElementById('novelties-footer');
+    var cd=document.getElementById('novelties-content'),fd=document.getElementById('novelties-footer');
     if(!cd)return;
     try{
-        let r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
-        let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
+        var r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
+        var t=await r.text();var rows=t.trim().split('\n').filter(function(l){return l.trim()});
         if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        let active=rows.slice(1).filter(row=>{
-            let c=row.split('\t');
-            let s=(c[3]||'').trim().toLowerCase();
-                        let forWho=(c[2]||'').trim().toLowerCase();
-            let isForSenior=forWho.includes('старш')||forWho.includes('специалист')||forWho.includes('руковод');
-            return (s==='актуально'||s==='актуальная')&&!isForSenior;
+        var active=rows.slice(1).filter(function(row){
+            var c=row.split('\t');
+            var s=(c[3]||'').trim().toLowerCase();
+            var forWho=(c[2]||'').trim().toLowerCase();
+            if(forWho.indexOf('старш')!==-1)return false;
+            if(forWho.indexOf('специалист')!==-1)return false;
+            if(forWho.indexOf('руковод')!==-1)return false;
+            if(s!=='актуально'&&s!=='актуальная')return false;
+            return true;
+        });
         if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Нет актуальных нововведений для сотрудников.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
-        let h='';
-        active.forEach(row=>{let c=row.split('\t');if(c.length<3)return;h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?.trim())+'</div><div class="novelty-title">'+escapeHtml(c[1]?.trim())+'</div><div class="novelty-desc">'+escapeHtml(c[2]?.trim())+'</div><span class="novelty-badge">'+escapeHtml(c[3]?.trim()||'Актуально')+'</span></div>'});
+        var h='';
+        active.forEach(function(row){
+            var c=row.split('\t');
+            if(c.length<3)return;
+            h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?c[0].trim():'')+'</div><div class="novelty-title">'+escapeHtml(c[1]?c[1].trim():'')+'</div><div class="novelty-desc">'+escapeHtml(c[2]?c[2].trim():'')+'</div><span class="novelty-badge">Актуально</span></div>';
+        });
         cd.innerHTML=h;fd.textContent='🔄 Обновлено: '+formatTime(new Date());
     }catch(e){cd.innerHTML='<div class="novelties-error">❌ Ошибка загрузки.</div>'}
 }
@@ -187,52 +195,52 @@ async function renderStopZones(){
     await loadStopZonesData();
 }
 async function loadStopZonesData(){
-    let cd=document.getElementById('stopzones-content'),fd=document.getElementById('stopzones-footer');
+    var cd=document.getElementById('stopzones-content'),fd=document.getElementById('stopzones-footer');
     if(!cd)return;
     try{
-        let r=await fetch(STOPZONES_URL);if(!r.ok)throw new Error();
-        let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
+        var r=await fetch(STOPZONES_URL);if(!r.ok)throw new Error();
+        var t=await r.text();var rows=t.trim().split('\n').filter(function(l){return l.trim()});
         if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Стоп-зон нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        let floors={},cf=null;
-        rows.slice(1).forEach(row=>{let c=row.split('\t'),f=(c[0]||'').trim(),s=(c[1]||'').trim();if(!f)return;if(f.toLowerCase().includes('этаж')||f.toLowerCase().includes('поддон')){cf=f;if(!floors[cf])floors[cf]={name:f,zones:[]}}else if(cf)floors[cf].zones.push({zone:f,reason:s||'Стоп размещение'})});
-        let fk=Object.keys(floors).filter(k=>floors[k].zones.length);
+        var floors={},cf=null;
+        rows.slice(1).forEach(function(row){var c=row.split('\t'),f=(c[0]||'').trim(),s=(c[1]||'').trim();if(!f)return;if(f.toLowerCase().indexOf('этаж')!==-1||f.toLowerCase().indexOf('поддон')!==-1){cf=f;if(!floors[cf])floors[cf]={name:f,zones:[]}}else if(cf)floors[cf].zones.push({zone:f,reason:s||'Стоп размещение'})});
+        var fk=Object.keys(floors).filter(function(k){return floors[k].zones.length});
         if(!fk.length){cd.innerHTML='<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
-        let h='';
-        fk.forEach(k=>{let fl=floors[k];h+='<div class="stopzone-floor"><div class="stopzone-floor-title">📍 '+escapeHtml(fl.name)+'</div><div class="stopzone-list">';fl.zones.forEach(z=>h+='<div class="stopzone-item"><span class="stopzone-zone">'+escapeHtml(z.zone)+'</span><span class="stopzone-reason">'+escapeHtml(z.reason)+'</span></div>');h+='</div></div>'});
+        var h='';
+        fk.forEach(function(k){var fl=floors[k];h+='<div class="stopzone-floor"><div class="stopzone-floor-title">📍 '+escapeHtml(fl.name)+'</div><div class="stopzone-list">';fl.zones.forEach(function(z){h+='<div class="stopzone-item"><span class="stopzone-zone">'+escapeHtml(z.zone)+'</span><span class="stopzone-reason">'+escapeHtml(z.reason)+'</span></div>'});h+='</div></div>'});
         cd.innerHTML=h;fd.textContent='🔄 Обновлено: '+formatTime(new Date());
     }catch(e){cd.innerHTML='<div class="novelties-error">❌ Ошибка загрузки.</div>'}
 }
 function switchTab(t){
     currentTab=t;
-    document.querySelectorAll('.nav-item').forEach(b=>{b.classList.remove('active');if(b.dataset.tab===t)b.classList.add('active')});
+    document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active');if(b.dataset.tab===t)b.classList.add('active')});
     if(t==='regulations')renderRegulations();else if(t==='novelties')renderNovelties();else if(t==='stopzones')renderStopZones();
 }
 function performSearch(){
     if(currentTab!=='regulations'){switchTab('regulations');setTimeout(performSearch,300);return}
-    let q=document.getElementById('searchInput').value.trim().toLowerCase();
+    var q=document.getElementById('searchInput').value.trim().toLowerCase();
     document.getElementById('noResultsMsg')?.remove();
-    document.querySelectorAll('.card').forEach(c=>{c.querySelectorAll('.highlight').forEach(m=>{let p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize()})});
-    if(!q){document.querySelectorAll('.card').forEach(c=>c.style.display='block');return}
-    let found=false;
-    document.querySelectorAll('.card').forEach(c=>{if((c.dataset.fulltext||'').includes(q)){c.style.display='block';highlightInCard(c,q);found=true}else c.style.display='none'});
-    if(!found){let m=document.createElement('div');m.id='noResultsMsg';m.className='note';m.style.textAlign='center';m.innerHTML='<i class="fas fa-search-minus"></i> Ничего не найдено.';document.getElementById('contentArea').appendChild(m)}
+    document.querySelectorAll('.card').forEach(function(c){c.querySelectorAll('.highlight').forEach(function(m){var p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize()})});
+    if(!q){document.querySelectorAll('.card').forEach(function(c){c.style.display='block'});return}
+    var found=false;
+    document.querySelectorAll('.card').forEach(function(c){if((c.dataset.fulltext||'').indexOf(q)!==-1){c.style.display='block';highlightInCard(c,q);found=true}else c.style.display='none'});
+    if(!found){var m=document.createElement('div');m.id='noResultsMsg';m.className='note';m.style.textAlign='center';m.innerHTML='<i class="fas fa-search-minus"></i> Ничего не найдено.';document.getElementById('contentArea').appendChild(m)}
 }
 function highlightInCard(card,q){
-    let w=document.createTreeWalker(card,NodeFilter.SHOW_TEXT,{acceptNode:n=>['SCRIPT','STYLE','MARK'].includes(n.parentElement?.tagName)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}),nr=[];
-    while(w.nextNode()){if(w.currentNode.textContent.toLowerCase().includes(q))nr.push(w.currentNode)}
-    nr.forEach(n=>{let s=document.createElement('span');s.innerHTML=n.textContent.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="highlight">$1</mark>');n.parentNode.replaceChild(s,n)});
+    var w=document.createTreeWalker(card,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return['SCRIPT','STYLE','MARK'].indexOf(n.parentElement?.tagName)!==-1?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),nr=[];
+    while(w.nextNode()){if(w.currentNode.textContent.toLowerCase().indexOf(q)!==-1)nr.push(w.currentNode)}
+    nr.forEach(function(n){var s=document.createElement('span');s.innerHTML=n.textContent.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="highlight">$1</mark>');n.parentNode.replaceChild(s,n)});
 }
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',function(){
     switchTab('regulations');
-    document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{let t=b.dataset.tab;if(t)switchTab(t)}));
+    document.querySelectorAll('.nav-item').forEach(function(b){b.addEventListener('click',function(){var t=b.dataset.tab;if(t)switchTab(t)})});
     document.getElementById('searchBtn').addEventListener('click',performSearch);
-    document.getElementById('searchInput').addEventListener('keyup',e=>{if(e.key==='Enter')performSearch()});
-    let ly=window.scrollY;
-    window.addEventListener('scroll',()=>{let cy=window.scrollY,h=document.getElementById('stickyHeader');if(cy>ly&&cy>80)h.classList.add('hidden');else h.classList.remove('hidden');ly=cy});
-    setInterval(()=>{if(currentTab==='novelties')loadNoveltiesData();if(currentTab==='stopzones')loadStopZonesData()},300000);
+    document.getElementById('searchInput').addEventListener('keyup',function(e){if(e.key==='Enter')performSearch()});
+    var ly=window.scrollY;
+    window.addEventListener('scroll',function(){var cy=window.scrollY,h=document.getElementById('stickyHeader');if(cy>ly&&cy>80)h.classList.add('hidden');else h.classList.remove('hidden');ly=cy});
+    setInterval(function(){if(currentTab==='novelties')loadNoveltiesData();if(currentTab==='stopzones')loadStopZonesData()},300000);
 });
-window.addEventListener('load',()=>{setTimeout(()=>{let s=document.getElementById('splash-screen');if(s){s.classList.add('hidden');setTimeout(()=>s?.remove(),600)}},1500)});
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+window.addEventListener('load',function(){setTimeout(function(){var s=document.getElementById('splash-screen');if(s){s.classList.add('hidden');setTimeout(function(){s?.remove()},600)}},1500)});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(function(){})}
 </script>
 </body>
 </html>
