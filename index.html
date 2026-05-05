@@ -184,7 +184,7 @@ async function loadNoveltiesData(){
         let r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
         let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
         if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        let active=rows.slice(1).filter(row=>{let s=(row.split('\t')[3]||'').trim().toLowerCase();return s==='актуально'||s==='актуальная'||s==='новое'});
+        let active=rows.slice(1).filter(row=>{let c=row.split('\t');let s=(c[3]||'').trim().toLowerCase();let w=(c[4]||'').trim().toLowerCase();return (s==='актуально'||s==='актуальная')&&(w==='для сотрудников'||w==='сотрудники'||w==='');});
         if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Все обработаны.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
         let h='';
         active.forEach(row=>{let c=row.split('\t');if(c.length<3)return;h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?.trim())+'</div><div class="novelty-title">'+escapeHtml(c[1]?.trim())+'</div><div class="novelty-desc">'+escapeHtml(c[2]?.trim())+'</div><span class="novelty-badge">'+escapeHtml(c[3]?.trim()||'Актуально')+'</span></div>'});
