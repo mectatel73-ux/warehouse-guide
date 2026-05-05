@@ -172,9 +172,9 @@ async function loadNoveltiesData(){
         let active=rows.slice(1).filter(row=>{
             let c=row.split('\t');
             let s=(c[3]||'').trim().toLowerCase();
-            let w=(c[4]||'').trim().toLowerCase();
-            return (s==='актуально'||s==='актуальная')&&(w==='для сотрудников'||w==='сотрудники'||w==='');
-        });
+                        let forWho=(c[2]||'').trim().toLowerCase();
+            let isForSenior=forWho.includes('старш')||forWho.includes('специалист')||forWho.includes('руковод');
+            return (s==='актуально'||s==='актуальная')&&!isForSenior;
         if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Нет актуальных нововведений для сотрудников.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
         let h='';
         active.forEach(row=>{let c=row.split('\t');if(c.length<3)return;h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?.trim())+'</div><div class="novelty-title">'+escapeHtml(c[1]?.trim())+'</div><div class="novelty-desc">'+escapeHtml(c[2]?.trim())+'</div><span class="novelty-badge">'+escapeHtml(c[3]?.trim()||'Актуально')+'</span></div>'});
