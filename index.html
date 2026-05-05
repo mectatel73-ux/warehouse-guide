@@ -27,14 +27,13 @@
         .search-bar input{flex:1;border:none;padding:.55rem 0;font-size:.85rem;outline:none;background:transparent;color:#333}
         .search-bar button{background:var(--red);border:none;border-radius:60px;padding:.5rem 1.4rem;color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;transition:var(--tr)}
         .search-bar button:hover{background:var(--red-dark)}
+        .hero-gallery{max-width:900px;margin:0 auto 1.5rem;padding:0 1rem;position:relative;overflow:hidden;border-radius:18px;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+        .hero-slides{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+        .hero-slides img{min-width:100%;height:280px;object-fit:cover;display:block}
+        .hero-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+        .hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:var(--tr)}
+        .hero-dot.active{background:#fff;transform:scale(1.3)}
         .content{max-width:900px;margin:1.5rem auto;padding:0 1rem}
-        .hero-gallery{max-width:900px;margin:0 auto 1.5rem;padding:0 1rem;position:relative;overflow:hidden;border-radius:18px;box-shadow:0 6px 24px rgba(0,0,0,.1)}
-.hero-slides{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1)}
-.hero-slides img{min-width:100%;height:280px;object-fit:cover;display:block}
-.hero-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
-.hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:var(--tr)}
-.hero-dot.active{background:#fff;transform:scale(1.3)}
-@media(max-width:800px){.hero-slides img{height:180px}}
         .accordion{margin-bottom:8px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#fff;transition:var(--tr)}
         .accordion:hover{box-shadow:0 4px 20px rgba(160,20,20,.05)}
         .accordion-header{display:flex;align-items:center;gap:12px;padding:1rem 1.3rem;cursor:pointer;user-select:none;font-weight:700;font-size:1rem;color:var(--red-dark);background:#fff;transition:var(--tr)}
@@ -94,7 +93,7 @@
         .stopzone-item:last-child{border-bottom:none}
         .stopzone-zone{font-family:monospace;font-weight:600;color:#333}
         .stopzone-reason{color:var(--red);font-weight:600}
-        @media(max-width:800px){.header-title{font-size:1.1rem}.photo-gallery img{max-width:100%}}
+        @media(max-width:800px){.header-title{font-size:1.1rem}.photo-gallery img{max-width:100%}.hero-slides img{height:180px}}
     </style>
 </head>
 <body>
@@ -127,10 +126,10 @@
     <div class="hero-dots"></div>
 </div>
 <div class="content" id="contentArea"></div>
-<footer>🔄 Версия 2.4 · Магнит Маркет · Вопросы — к старшему смены</footer>
+<footer>🔄 Версия 2.5 · Магнит Маркет · Вопросы — к старшему смены</footer>
 <div class="bottom-nav">
     <button class="nav-item active" data-tab="regulations"><i class="fas fa-clipboard-list"></i><span>Регламент</span></button>
-    <button class="nav-item" data-tab="stopzones"><img src="https://img.icons8.com/ios-filled/50/6d5d5d/stop-sign.png" alt="стоп" style="width:20px;height:20px"><span>Стоп-зоны</span></button>
+    <button class="nav-item" data-tab="stopzones"><i class="fas fa-stop-circle"></i><span>Стоп-зоны</span></button>
     <button class="nav-item" data-tab="novelties"><i class="fas fa-bell"></i><span>Нововведения</span></button>
 </div>
 <script>
@@ -141,7 +140,7 @@ var sectionsData=[
     {id:"rule-check",icon:"🔍",title:"1.3 Сверка ШК и пересчёт",content:'<p>Перед размещением товар проходит пересчёт.<br>✅ <strong>Сверка ШК товара с Актом приёма-передачи ОБЯЗАТЕЛЬНА.</strong></p>'},
     {id:"rule-packing",icon:"🧱",title:"1.4 Требования к упаковке",content:'<ul><li>Сыпучие, острые, магнитные — в плотной упаковке</li><li>Жидкие — вертикально</li><li>Хрупкие — в индивидуальной упаковке</li><li>Тяжёлые — вниз, лёгкие — вверх</li><li>ШК должен быть виден</li></ul>'},
     {id:"floors",icon:"🏢",title:"2. Этажи склада",content:'<ul><li><strong>1 этаж:</strong> сыпучие, жидкие, тяжёлые, нестандарт</li><li><strong>2 этаж:</strong> крупногабарит (>13 701 см³ или длина >40 см)</li><li><strong>3 этаж:</strong> Сейф + ЭКО</li><li><strong>4–6 этажи:</strong> остальные категории</li></ul><div class="photo-gallery"><img src="2 этаж.jpg"><img src="2 этаж..jpg"></div>'},
-    {id:"dimensions",icon:"📐",title:"Габариты товаров по полкам",content:'<table class="size-table"><tr><th>Полка</th><th>Объём (куб. см)</th><th>Примечание</th></tr><tr><td>4 полка</td><td>0 – 170</td><td>Макс. сторона ≤15 см</td></tr><tr><td>3,5 полка</td><td>171 – 1000</td><td>Более 15 см длины → на 3 или 5 полку!</td></tr><tr><td>6 полка</td><td>1001 – 3419</td><td>Макс. сторона ≤40 см, вес ≤3 кг</td></tr><tr><td>1 полка</td><td>3420 – 13700</td><td>Крупногабарит, обувь</td></tr></table><p><strong>Формула:</strong> высота × длина × ширина = объём</p><p>⚠️ <strong>Более 40 см длины — на 2 этаж!</strong></p>'},
+    {id:"dimensions",icon:"📐",title:"Габариты товаров по полкам",content:'<table class="size-table"><tr><th>Полка</th><th>Объём (куб. см)</th><th>Примечание</th></tr><tr><td>4 полка</td><td>0 – 170</td><td>Макс. сторона ≤15 см</td></tr><tr><td>3,5 полка</td><td>171 – 1000</td><td>Более 15 см → на 3 или 5!</td></tr><tr><td>6 полка</td><td>1001 – 3419</td><td>Макс. сторона ≤40 см, вес ≤3 кг</td></tr><tr><td>1 полка</td><td>3420 – 13700</td><td>Крупногабарит, обувь</td></tr></table><p><strong>Формула:</strong> высота × длина × ширина = объём</p><p>⚠️ <strong>Более 40 см длины — на 2 этаж!</strong></p>'},
     {id:"shelf-1",icon:"🟦",title:"3.1 Первая полка",content:'<p>Крупногабарит: 3420–13700 см³. Также обувь. Допускается деление при личном пересчёте.</p><div class="photo-gallery"><img src="Первая полка 1.jpg"><img src="Первая полка 2.jpg"></div>'},
     {id:"shelf-2",icon:"👕",title:"3.2 Вторая полка",content:'<p><strong>ТОЛЬКО Одежда и Обувь!</strong></p><div class="photo-gallery"><img src="Полка 2.jpg"></div>'},
     {id:"shelf-3",icon:"🟩",title:"3.3 Третья полка",content:'<p>171–1000 см³, макс. сторона ≤40 см. Если есть короб — только мелкоштучный.</p><div class="photo-gallery"><img src="Третья полка.jpg"><img src="Третья полка 2.jpg"></div>'},
@@ -152,7 +151,7 @@ var sectionsData=[
     {id:"large-size",icon:"🖼️",title:"5. Крупногабаритный товар",content:'<p>2 этаж: >13 701 см³ или сторона >40 см. Картины, холсты — вертикально, ШК к проходу.</p>'},
     {id:"pallet",icon:"📦",title:"6. Поддонное размещение",content:'<p><strong>Правила:</strong></p><ul><li><span class="badge badge-red">ТОЛЬКО 1 SKU</span> на поддоне</li><li>Не более 1 поддона в ячейку</li><li>Запрещено штабелировать поддоны</li><li>Вес ≤400 кг на этажах</li><li>Высота ≤160 см</li></ul><div class="photo-gallery"><img src="Поддонка 1.jpg"><img src="Поддонка 2.jpg"></div>'},
     {id:"vetapteka",icon:"💊",title:"Ветаптека — Зоотовары",content:'<p><strong>В 71 ряду выделены стеллажи L.1.71.21 и L.1.71.19 под категорию «Ветаптека».</strong></p><p><span class="badge badge-red">ОБЯЗАТЕЛЬНО</span> — размещаем строго в коробках!</p><p><strong>Категории товаров:</strong></p><ul><li>Антипаразитарные средства</li><li>Бинты и бандажи</li><li>Ветеринарные паспорта</li><li>Витамины и добавки для животных</li><li>Воротники и лечебные ошейники</li><li>Средства для глаз и ушей</li><li>Средства для кожи и шерсти</li><li>Средства для полости рта</li><li>Средства для почек и мочеполовой системы</li><li>Успокоительные средства</li></ul>'},
-    {id:"safe",icon:"🔒",title:"7. Сейфовое размещение",content:'<p><strong>Размещением товаров в данные зоны занимаются ответственные сотрудники отдела товародвижения из каждой смены, которые прошли согласование на данный вид работ в службе безопасности, а также имеют допуск по Face ID.</strong></p><div class="photo-gallery"><img src="СейфFaceID 1.jpg"><img src="СейфFaceID 2.jpg"></div><p><strong>Категории товаров, подлежащих размещению в зону сейфа:</strong></p><ul><li>Смартфоны, гаджеты, запчасти и аксессуары к ним (телефоны, смарт-часы, фитнес-браслеты, планшеты, электронные книги и проч.) себестоимостью от 500 руб., кроме З.У, кабелей, чехлов для смартфонов (исключение ALGA и т.п.)</li><li>Фото и видео техника, алкотестеры (фотоаппараты, видеорегистраторы, камеры видеонаблюдения экшн камеры и проч.) себестоимостью от 500 руб.</li><li>Консоли и видеоигры, микрофоны, портативная акустика, радиосистемы, плееры, наушники и гарнитуры, диктофоны и проч. себестоимостью от 1000 руб.</li><li>Оргтехника и оборудование: (компьютеры, ноутбуки Wi-Fi роутеры, техника для печати, и проч.) себестоимостью от 2000 руб.</li><li>Периферия и аксессуары к оргтехнике (клавиатуры, мыши, игровые наборы) себестоимостью от 1000 р.</li><li>Внешний аккумулятор Power Bank – от 1000 р.</li><li>Все внешние накопители, флешкарты и проч.</li><li>usb-зажигалки, бензиновые зажигалки (наполнитель бензин или газ), спички, (исключение зажигалки для кухонных плит (ПУСТЫЕ) - не относятся к сейфовому товару).</li><li>Часы наручные себестоимостью от 500 руб.</li><li>Вся бижутерия от 500 руб.</li><li>Парфюмы (туалетная вода, духи, одеколоны, парфюмерные масла) от 5000 руб.</li><li>Дорогостоящие строительные инструменты (шуруповерты и проч. мелкий и средний) от 5000 руб.</li><li>Одежда (футболки, блузки, майки, рубашки себестоимостью от 1000 руб.) (носочно-чулочные изделия и нижнее белье себестоимостью от 1500 руб. ЗА 1 ЕДИНИЦУ ТОВАРА, а не за комплект/упаковку). Вся остальная одежда себестоимостью от 1500 руб. (Примечание: верхняя одежда, халаты, спецодежда размещается вне сейфа)</li><li>Обувь себестоимостью от 1500 руб, обувь в коробках вне зависимости от цены.</li><li>Вся одежда марки ALGA.</li><li>Фены от 15.000 руб.</li><li>Ножи (кроме канцелярских, кухонных принадлежностей)</li><li>Пневматическое (Мощностью до 3ДЖ, свыше 3ДЖ не принимаем), страйкбольное оружие, шумовые патроны, арбалеты (с усилием натяжения не более 43 кгс), луки (с усилием натяжения не более 27 кгс).</li><li>Авто аксессуары (сканеры, лампочки и проч. - себестоимостью от 1500 руб.)</li><li>Подарочные сертификаты, сим карты, коды активации для игр, подлинные банкноты, подарочные и коллекционные монеты и прочие товары данной категории, НЕЗАВИСИМО от стоимости, размещаются в сейф.</li></ul>'},
+    {id:"safe",icon:"🔒",title:"7. Сейфовое размещение",content:'<p><strong>Размещением товаров в данные зоны занимаются ответственные сотрудники отдела товародвижения из каждой смены, которые прошли согласование на данный вид работ в службе безопасности, а также имеют допуск по Face ID.</strong></p><div class="photo-gallery"><img src="СейфFaceID 1.jpg"><img src="СейфFaceID 2.jpg"></div><p><strong>Категории товаров, подлежащих размещению в зону сейфа:</strong></p><ul><li>Смартфоны, гаджеты, запчасти и аксессуары к ним — от 500₽ (кроме ЗУ, кабелей, чехлов)</li><li>Фото/видео техника, алкотестеры — от 500₽</li><li>Консоли, наушники, гарнитуры, диктофоны — от 1000₽</li><li>ПК, ноутбуки, роутеры, техника для печати — от 2000₽</li><li>Периферия (клавиатуры, мыши) — от 1000₽</li><li>Power Bank — от 1000₽; все флешки и накопители</li><li>USB-зажигалки, бензиновые зажигалки, спички (кроме пустых кухонных)</li><li>Часы — от 500₽; бижутерия — от 500₽</li><li>Парфюм — от 5000₽; инструменты — от 5000₽</li><li>Одежда: футболки/рубашки от 1000₽; бельё от 1500₽/ед; остальное от 1500₽</li><li>Обувь от 1500₽ или в коробках; ALGA — вся</li><li>Фены от 15000₽; ножи (не кухонные)</li><li>Пневматика ≤3 Дж, страйкбол, арбалеты ≤43 кгс, луки ≤27 кгс</li><li>Автоаксессуары — от 1500₽</li><li>Сертификаты, сим-карты, монеты — всегда в сейф</li></ul>'},
     {id:"dangerous",icon:"☣️",title:"8. Потенциально опасные товары",content:'<div class="photo-gallery"><img src="ГСМ.jpg"></div>'}
 ];
 </script><script>
@@ -162,6 +161,31 @@ var currentTab='regulations';
 function stripHtml(h){var d=document.createElement('div');d.innerHTML=h;return d.textContent||''}
 function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[m]})}
 function formatTime(d){return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+
+(function(){
+    var slides=document.querySelector('.hero-slides');
+    if(!slides)return;
+    var imgs=slides.querySelectorAll('img');
+    var dotsContainer=document.querySelector('.hero-dots');
+    var current=0;
+    var total=imgs.length;
+    if(!dotsContainer)return;
+    for(var i=0;i<total;i++){
+        (function(idx){
+            var dot=document.createElement('span');
+            dot.className='hero-dot'+(idx===0?' active':'');
+            dot.addEventListener('click',function(){goTo(idx)});
+            dotsContainer.appendChild(dot);
+        })(i);
+    }
+    function goTo(idx){
+        current=idx;
+        slides.style.transform='translateX(-'+current+'00%)';
+        var dots=document.querySelectorAll('.hero-dot');
+        dots.forEach(function(d,i){d.classList.toggle('active',i===current)});
+    }
+    setInterval(function(){goTo((current+1)%total)},4000);
+})();
 
 function renderRegulations(){
     var c=document.getElementById('contentArea');c.innerHTML='';
@@ -200,7 +224,7 @@ function loadNoveltiesData(){
 }
 
 function renderStopZones(){
-    document.getElementById('contentArea').innerHTML='<div><div class="stopzones-header"><img src="https://img.icons8.com/color/48/stop-sign.png" alt="стоп" style="width:28px;height:28px"><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>';
+    document.getElementById('contentArea').innerHTML='<div><div class="stopzones-header"><i class="fas fa-stop-circle" style="color:#d32f2f;font-size:1.5rem"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>';
     loadStopZonesData();
 }
 
@@ -254,22 +278,7 @@ document.addEventListener('DOMContentLoaded',function(){
     setInterval(function(){if(currentTab==='novelties')loadNoveltiesData();if(currentTab==='stopzones')loadStopZonesData()},300000);
 });
 
-window.addEventListener('load',function(){(function(){
-    var slides=document.querySelector('.hero-slides');
-    if(!slides)return;
-    var imgs=slides.querySelectorAll('img');
-    var dotsContainer=document.querySelector('.hero-dots');
-    var current=0;
-    var total=imgs.length;
-    for(var i=0;i<total;i++){
-        var dot=document.createElement('span');
-        dot.className='hero-dot'+(i===0?' active':'');
-        dot.addEventListener('click',function(idx){return function(){goTo(idx)}}(i));
-        dotsContainer.appendChild(dot);
-    }
-    function goTo(idx){current=idx;slides.style.transform='translateX(-'+current+'00%)';document.querySelectorAll('.hero-dot').forEach(function(d,i){d.classList.toggle('active',i===current)})}
-    setInterval(function(){goTo((current+1)%total)},4000);
-})();setTimeout(function(){var s=document.getElementById('splash-screen');if(s){s.classList.add('hidden');setTimeout(function(){s?.remove()},500)}},1400)});
+window.addEventListener('load',function(){setTimeout(function(){var s=document.getElementById('splash-screen');if(s){s.classList.add('hidden');setTimeout(function(){s?.remove()},500)}},1400)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(function(){})}
 </script>
 </body>
