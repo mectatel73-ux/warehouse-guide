@@ -163,33 +163,61 @@ async function renderNovelties(){
     await loadNoveltiesData();
 }
 async function loadNoveltiesData(){
-    var cd=document.getElementById('novelties-content'),fd=document.getElementById('novelties-footer');
-    if(!cd)return;
+async function loadNoveltiesData(){
+    var cd=document.getElementById('novelties-content');
+    var fd=document.getElementById('novelties-footer');
+    if(!cd){return;}
     try{
-        var r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
-        var t=await r.text();var rows=t.trim().split('\n').filter(function(l){return l.trim()});
-        if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        var active=rows.slice(1).filter(function(row){
-            var c=row.split('\t');
-            var s=(c[3]||'').trim().toLowerCase();
+        var r=await fetch(NOVELTIES_URL);
+        if(!r.ok){throw new Error('fetch failed');}
+        var t=await r.text();
+        var allRows=t.split('\n');
+        var rows=[];
+        for(var i=0;i<allRows.length;i++){
+            if(allRows[i].trim()!==''){rows.push(allRows[i]);}
+        }
+        if(rows.length<2){
+            cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';
+            fd.textContent='Проверено: '+formatTime(new Date());
+            return;
+        }
+        var active=[];
+        for(var j=1;j<rows.length;j++){
+            var c=rows[j].split('\t');
+            if(c.length<4){continue;}
             var forWho=(c[2]||'').trim().toLowerCase();
-            if(forWho.indexOf('старш')!==-1)return false;
-            if(forWho.indexOf('специалист')!==-1)return false;
-            if(forWho.indexOf('руковод')!==-1)return false;
-            if(s!=='актуально'&&s!=='актуальная')return false;
-            return true;
-        });
-        if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Нет актуальных нововведений для сотрудников.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
+            var status=(c[3]||'').trim().toLowerCase();
+            if(forWho.indexOf('старш')!==-1){continue;}
+            if(forWho.indexOf('специалист')!==-1){continue;}
+            if(forWho.indexOf('руковод')!==-1){continue;}
+            if(status!=='актуально'&&status!=='актуальная'){continue;}
+            active.push(c);
+        }
+        if(active.length===0){
+            cd.innerHTML='<div class="novelties-empty">✅ Нет актуальных нововведений для сотрудников.</div>';
+            fd.textContent='Обновлено: '+formatTime(new Date());
+            return;
+        }
         var h='';
-        active.forEach(function(row){
-            var c=row.split('\t');
-            if(c.length<3)return;
-            h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?c[0].trim():'')+'</div><div class="novelty-title">'+escapeHtml(c[1]?c[1].trim():'')+'</div><div class="novelty-desc">'+escapeHtml(c[2]?c[2].trim():'')+'</div><span class="novelty-badge">Актуально</span></div>';
-        });
-        cd.innerHTML=h;fd.textContent='🔄 Обновлено: '+formatTime(new Date());
-    }catch(e){cd.innerHTML='<div class="novelties-error">❌ Ошибка загрузки.</div>'}
-}
-async function renderStopZones(){
+        for(var k=0;k<active.length;k++){
+            var c=active[k];
+            var dateVal=c[0]?c[0].trim():'';
+            var titleVal=c[1]?c[1].trim():'';
+            var descVal=c[2]?c[2].trim():'';
+            h+='<div class="novelty-card">';
+            h+='<div class="novelty-date">📅 '+escapeHtml(dateVal)+'</div>';
+            h+='<div class="novelty-title">'+escapeHtml(titleVal)+'</div>';
+            h+='<div class="novelty-desc">'+escapeHtml(descVal)+'</div>';
+            h+='<span class="novelty-badge">Актуально</span>';
+            h+='</div>';
+        }
+        cd.innerHTML=h;
+        fd.textContent='🔄 Обновлено: '+formatTime(new Date());
+    }catch(e){
+        cd.innerHTML='<div class="novelties-error">❌ Ошибка загрузки: '+escapeHtml(e.message)+'</div>';
+        fd.textContent='';
+    }
+}{
     document.getElementById('sidebarContainer').style.display='none';
     document.getElementById('contentArea').innerHTML='<div class="stopzones-container"><div class="stopzones-header"><i class="fas fa-stop-circle"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>';
     await loadStopZonesData();
