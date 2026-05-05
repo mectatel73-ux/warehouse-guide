@@ -1,290 +1,48 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Справочник сотрудника склада | Магнит Маркет</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Магнит Маркет">
-    <link rel="apple-touch-icon" href="МАГНИТОТД_1.jpeg">
-    <meta name="theme-color" content="#c41e1e">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Roboto,sans-serif;background:#fdf5f5;color:#2d1a1a;line-height:1.5;padding-bottom:70px}
-        .sticky-header{position:sticky;top:0;background:linear-gradient(135deg,#c41e1e,#e63946);color:#fff;padding:1rem 2rem;box-shadow:0 4px 16px rgba(180,30,30,.25);z-index:100;transition:transform .3s}
-        .sticky-header.hidden{transform:translateY(-100%)}
-        .header-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-        .sticky-header h1{font-size:1.4rem;display:flex;align-items:center;gap:10px;margin:0}
-        .sticky-header p{opacity:.95;font-size:.85rem;margin-top:4px}
-        .search-bar{display:flex;gap:8px;background:#fff;border-radius:48px;padding:.2rem .2rem .2rem 1rem;min-width:240px}
-        .search-bar i{color:#c41e1e;align-self:center}
-        .search-bar input{flex:1;border:none;padding:.6rem 0;font-size:.9rem;outline:none;background:transparent}
-        .search-bar button{background:#2d1a1a;border:none;border-radius:40px;padding:.4rem 1rem;color:#fff;font-weight:700;cursor:pointer}
-        .search-bar button:hover{background:#4a2020}
-        .container{display:flex;max-width:1400px;margin:1.5rem auto;padding:0 1.5rem;gap:2rem}
-        .sidebar{flex:1;min-width:240px;background:#fff;border-radius:24px;padding:1.5rem;box-shadow:0 8px 20px rgba(180,30,30,.06);height:fit-content;position:sticky;top:90px;border-top:4px solid #e63946}
-        .sidebar h3{margin-bottom:1rem;font-size:1.2rem;border-left:4px solid #e63946;padding-left:12px;color:#2d1a1a}
-        .sidebar ul{list-style:none}.sidebar li{margin:.7rem 0}
-        .sidebar a{text-decoration:none;color:#4a2020;font-weight:500;cursor:pointer;transition:.2s;display:inline-block}
-        .sidebar a:hover{color:#e63946;transform:translateX(4px)}
-        .content{flex:3;background:#fff;border-radius:24px;padding:1.8rem 2rem;box-shadow:0 8px 20px rgba(180,30,30,.06);min-height:400px;border-top:4px solid #e63946}
-        .card{margin-bottom:2.5rem;border-bottom:1px solid #f5e5e5;padding-bottom:1.5rem;scroll-margin-top:80px}
-        .card:last-child{border-bottom:none}
-        .card h2{font-size:1.6rem;margin-bottom:.5rem;color:#2d1a1a;display:flex;align-items:center;gap:10px}
-        .card ul,.card ol{margin-left:1.8rem;margin-bottom:1rem}
-        .note{background:#fff5f5;border-left:4px solid #e63946;padding:.8rem 1rem;border-radius:12px;margin:.8rem 0}
-        .highlight{background-color:#ffd4d4;padding:2px 4px;border-radius:4px}
-        .photo-gallery{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
-        ..photo-gallery img{max-width:280px;width:100%;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;transition:transform .2s;display:block}
-.photo-gallery img[src=""]{display:none}
-.photo-gallery img:not([src]),.photo-gallery img[src=""]{display:none}
-.photo-gallery img:error{display:none}
-        .photo-gallery img:hover{transform:scale(1.02)}
-        footer{text-align:center;margin:2rem 0 0;font-size:.8rem;color:#8a6e6e}
-        .bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);box-shadow:0 -4px 12px rgba(180,30,30,.08);display:flex;justify-content:space-around;align-items:center;padding:8px 16px;border-top:1px solid #f5e5e5;z-index:200}
-        .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 12px;border-radius:32px;font-size:.75rem;color:#8a6e6e;font-weight:500}
-        .nav-item i{font-size:1.4rem;color:#c41e1e}.nav-item span{font-size:.7rem}
-        .nav-item:hover{background:#fff0f0}.nav-item.active{background:#ffe8e8;color:#a01010}.nav-item.active i{color:#a01010}
-        #splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#c41e1e,#8b0000);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
-        #splash-screen.hidden{opacity:0;visibility:hidden}
-        #splash-screen img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 8px 32px rgba(0,0,0,.3);animation:splashPulse 2s infinite}
-        @keyframes splashPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-        #splash-screen .splash-text{color:#fff;margin-top:20px;font-size:1.2rem;font-weight:600;letter-spacing:2px;opacity:0;animation:splashFadeIn 1s .5s forwards}
-        @keyframes splashFadeIn{to{opacity:1}}
-        #splash-screen .splash-loader{width:60px;height:3px;background:rgba(255,255,255,.3);border-radius:10px;margin-top:24px;overflow:hidden}
-        #splash-screen .splash-loader-bar{width:40%;height:100%;background:#fff;border-radius:10px;animation:splashLoading 1.5s infinite}
-        @keyframes splashLoading{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
-        .novelties-container{padding:0}
-        .novelties-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:2px solid #c41e1e}
-        .novelties-header i{font-size:1.8rem;color:#c41e1e}.novelties-header h2{margin:0;color:#a01010;font-size:1.5rem}
-        .novelty-card{background:#fffafa;border-left:4px solid #c41e1e;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem}
-        .novelty-date{font-size:.8rem;color:#c41e1e;font-weight:600;margin-bottom:.3rem}
-        .novelty-title{font-weight:700;font-size:1.05rem;color:#4a0000;margin-bottom:.3rem}
-        .novelty-desc{font-size:.9rem;color:#444}
-        .novelty-badge{display:inline-block;background:#e8f5e9;color:#2e7d32;padding:2px 10px;border-radius:12px;font-size:.75rem;font-weight:600;margin-top:.5rem}
-        .novelties-footer{margin-top:1rem;padding-top:.8rem;border-top:1px solid #f5e5e5;text-align:right;font-size:.75rem;color:#999}
-        .novelties-loading,.novelties-error,.novelties-empty{text-align:center;padding:2rem;color:#666}
-        .novelties-error{color:#c41e1e}
-        .stopzones-container{padding:0}
-        .stopzones-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:2px solid #d32f2f}
-        .stopzones-header i{font-size:1.8rem;color:#d32f2f}.stopzones-header h2{margin:0;color:#a01010;font-size:1.5rem}
-        .stopzone-alert{background:#fff0f0;border-left:4px solid #ff6f00;padding:.8rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:.85rem;color:#a01010}
-        .stopzone-floor{background:#fafafa;border-radius:8px;margin-bottom:.8rem;overflow:hidden;border:1px solid #f5e5e5}
-        .stopzone-floor-title{background:#c41e1e;color:#fff;padding:.6rem 1rem;font-weight:600;font-size:.9rem}
-        .stopzone-list{padding:.5rem 1rem}
-        .stopzone-item{display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid #fdf0f0;font-size:.85rem}
-        .stopzone-item:last-child{border-bottom:none}
-        .stopzone-zone{font-family:monospace;font-weight:600;color:#333}
-        .stopzone-reason{color:#c41e1e;font-weight:500;font-size:.8rem}
-        @media(max-width:800px){.container{flex-direction:column;margin-top:1rem}.sidebar{position:static;margin-bottom:1rem}.sticky-header h1{font-size:1.1rem}.search-bar{min-width:auto;width:100%}.header-content{flex-direction:column;align-items:stretch}.content{padding:1rem}.card h2{font-size:1.3rem}.photo-gallery img{max-width:100%}}
-    </style>
-    <script>
-window.addEventListener('load',function(){
-    document.querySelectorAll('img').forEach(function(img){
-        if(img.naturalWidth===0&&img.naturalHeight===0){
-            img.style.display='none';
-        }
-        img.addEventListener('error',function(){
-            img.style.display='none';
+const NOVELTIES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
+const STOPZONES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
+let currentTab='regulations';
+function stripHtml(h){let d=document.createElement('div');d.innerHTML=h;return d.textContent||''}
+function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m])}
+function formatTime(d){return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+function renderRegulations(){
+    document.getElementById('sidebarContainer').style.display='block';
+    let c=document.getElementById('contentArea');c.innerHTML='';
+    sections.forEach(s=>{
+        let card=document.createElement('div');card.className='card';card.id=s.id;
+        card.setAttribute('data-fulltext',(s.title+' '+stripHtml(s.content)).toLowerCase());
+        card.innerHTML='<h2>'+s.title+'</h2>'+s.content;
+        c.appendChild(card);
+    });
+    buildTOC();
+}
+function buildTOC(){
+    let l=document.getElementById('tableOfContents');l.innerHTML='';
+    sections.forEach(s=>{
+        let li=document.createElement('li'),a=document.createElement('a');
+        a.href='#';a.textContent=s.title;
+        a.addEventListener('click',e=>{e.preventDefault();document.getElementById(s.id)?.scrollIntoView({behavior:'smooth'})});
+        li.appendChild(a);l.appendChild(li);
+    });
+}
+async function renderNovelties(){
+    document.getElementById('sidebarContainer').style.display='none';
+    document.getElementById('contentArea').innerHTML='<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения для сотрудников. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>';
+    await loadNoveltiesData();
+}
+async function loadNoveltiesData(){
+    let cd=document.getElementById('novelties-content'),fd=document.getElementById('novelties-footer');
+    if(!cd)return;
+    try{
+        let r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
+        let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
+        if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
+        let active=rows.slice(1).filter(row=>{
+            let c=row.split('\t');
+            let s=(c[3]||'').trim().toLowerCase();
+            let w=(c[4]||'').trim().toLowerCase();
+            return (s==='актуально'||s==='актуальная')&&(w==='для сотрудников'||w==='сотрудники'||w==='');
         });
-    });
-});
-</script>
-</head>
-<body>
-<div id="splash-screen">
-    <img src="1777931118.png" alt="Магнит Маркет">
-    <div class="splash-text">МАГНИТ МАРКЕТ</div>
-    <div class="splash-loader"><div class="splash-loader-bar"></div></div>
-</div>
-<header class="sticky-header" id="stickyHeader">
-    <div class="header-content">
-        <div>
-            <h1><img src="1777931118.png" alt="Магнит Маркет" style="height:36px;vertical-align:middle;border-radius:50%;margin-right:8px;">Справочник сотрудника склада</h1>
-            <p>Магнит Маркет — регламент размещения, хранения и безопасности товара</p>
-        </div>
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Поиск (полка, сейф, одежда)...">
-            <button id="searchBtn">Найти</button>
-        </div>
-    </div>
-</header>
-<div class="container">
-    <div class="sidebar" id="sidebarContainer">
-        <h3><i class="fas fa-list-ul"></i> Содержание</h3>
-        <ul id="tableOfContents"></ul>
-    </div>
-    <div class="content" id="contentArea"></div>
-</div>
-<footer><i class="fas fa-sync-alt"></i> Версия 1.0 · При обнаружении ошибок сообщите старшему смены</footer>
-<div class="bottom-nav">
-    <button class="nav-item active" data-tab="regulations"><i class="fas fa-book-open"></i><span>Регламенты</span></button>
-    <button class="nav-item" data-tab="stopzones"><i class="fas fa-stop-circle"></i><span>Стоп-зоны</span></button>
-    <button class="nav-item" data-tab="novelties"><i class="fas fa-newspaper"></i><span>Нововведения</span></button>
-</div>
-<script>
-const sections=[
-    {id:"welcome",title:"🏠 Введение",content:'<p>Данный регламент описывает требования по размещению и хранению товара на складе Магнит Маркет, с целью увеличения скорости сборки и снижения рисков потери и повреждения товара.</p><p>Товар должен быть расположен по ячейкам хранения так, чтобы в дальнейшем не пришлось изыскивать дополнительных площадей. Рабочее пространство не должно быть захламлено.</p>'},
-    {id:"rule-scan-zone",title:"📱 1.1 Сканирование зоны работы",content:'<p><strong>Для начала размещения необходимо:</strong></p><ul><li>Зайти в программу «PickApp»</li><li>Отсканировать зону работы</li><li>Отсканировать штрихкод грузоместа или акта целиком</li></ul><div class="photo-gallery"><img src="1.1.jpg" alt="1"><img src="1.1 (2).jpg" alt="2"><img src="1.1 (3).jpg" alt="3"><img src="1.1 (4).jpg" alt="4"></div>'},
-    {id:"rule-scan-sku",title:"📦 1.2 Сканирование SKU и ячейки",content:'<p>После сканирования зоны:</p><ul><li>Отсканируйте штрихкод (SKU) товара</li><li>Укажите количество</li><li>Отсканируйте ячейку</li></ul><p>Вы можете посмотреть список товаров, которые разместили или осталось разместить.</p><div class="photo-gallery"><img src="1.2.jpg" alt="1"><img src="1.2 (2).jpg" alt="2"><img src="1.2 (3).jpg" alt="3"><img src="1.2 (5).jpg" alt="5"></div>'},
-    {id:"rule-check",title:"🔍 1.3 Сверка ШК и пересчёт",content:'<p>Перед размещением товар проходит процедуру пересчёта.<br>✅ <strong>Сверка ШК товара с Актом приема-передачи ОБЯЗАТЕЛЬНА.</strong></p>'},
-    {id:"rule-packing",title:"🧱 1.4 Требования к упаковке",content:'<ul><li>Сыпучие, острые, магнитные — в плотной упаковке</li><li>Жидкие — вертикально</li><li>Хрупкие — строго в индивидуальной упаковке</li><li>Тяжелые — в нижние ячейки, легкие — в верхние</li><li>ШК должен быть виден</li><li>Размещать согласно габаритам: мелко-, средне-, крупногабаритные ячейки</li></ul>'},
-    {id:"floors",title:"🏢 2. Этажи склада",content:'<ul><li><strong>1 этаж:</strong> сыпучие, жидкие, тяжёлые, нестандартные</li><li><strong>2 этаж:</strong> крупногабарит (>13 701 см³)</li><li><strong>3 этаж:</strong> Сейф + ЭКО</li><li><strong>4–6 этажи:</strong> остальные категории</li></ul><div class="photo-gallery"><img src="2 этаж.jpg" alt="2этаж"><img src="2 этаж..jpg" alt="СпецРяд"></div>'},
-    {id:"shelf-1",title:"🟦 3.1 Первая полка",content:'<p>Крупногабарит: 3420 – 13700 см³. Также обувь.<br>Допускается деление товара на несколько ячеек при личном пересчете.</p><div class="photo-gallery"><img src="Первая полка 1.jpg" alt="1"><img src="Первая полка 2.jpg" alt="2"></div>'},
-    {id:"shelf-2",title:"👕 3.2 Вторая полка",content:'<p><strong>ТОЛЬКО Одежда и Обувь.</strong> Другой товар ЗАПРЕЩЁН!</p><div class="photo-gallery"><img src="Полка 2.jpg" alt="2"></div>'},
-    {id:"shelf-3",title:"🟩 3.3 Третья полка",content:'<p>Небольшие товары: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть пластиковый короб — ТОЛЬКО мелкоштучный товар.</p><div class="photo-gallery"><img src="Третья полка.jpg" alt="1"><img src="Третья полка 2.jpg" alt="2"></div>'},
-    {id:"shelf-4",title:"🟨 3.4 Четвертая полка",content:'<p>Мелкоштучный товар: 0 – 170 см³, макс. сторона ≤15 см. В пластиковые короба.</p><div class="photo-gallery"><img src="четвертая полка 1.jpg" alt="1"><img src="четвертая полка 2.jpg" alt="2"></div>'},
-    {id:"shelf-5",title:"🟧 3.5 Пятая полка",content:'<p>Как третья полка: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть короб — ТОЛЬКО мелкоштучный товар.</p><div class="photo-gallery"><img src="Пятая полка.jpg" alt="1"><img src="Пятая полка 2.jpg" alt="2"></div>'},
-    {id:"shelf-6",title:"🟥 3.6 Шестая полка",content:'<p>Товары: 1001 – 3419 см³, вес ≤3 кг, макс. сторона ≤40 см.<br>Также: обувь, верхняя одежда.<br>⚖️ Тяжёлые — по краям, лёгкие — в центр. Общий вес ≤35 кг.</p><div class="photo-gallery"><img src="шестая полка.jpg" alt="1"><img src="шестая полка 2.jpg" alt="2"></div>'},
-    {id:"forbidden",title:"⛔ 4. Строго запрещено",content:'<ul><li>2 одинаковых товара с разными ШК в одной ячейке</li><li>Товар в коробке (вынимать)</li><li>В пакетах, резинках, с накладной</li><li>Крупный сверху на мелкий</li><li>Вторым рядом</li><li>Поверх существующего</li><li>>35 кг на полку</li><li>Тяжёлый в центр</li><li>Без упаковки / повреждённая</li><li>Скользкие друг на друга</li></ul>'},
-    {id:"large-size",title:"🖼️ 5. Крупногабаритный товар",content:'<p>2 этаж: >13 701 см³ или сторона >40 см.<br>Также: Картины, Холсты, Автоковры, Телевизоры.<br>❗ Картины и холсты — строго вертикально, ШК к проходу.</p>'},
-    {id:"pallet",title:"🚜 6. Поддонное размещение",content:'<p>Допускается для больших партий.</p><p><strong>Запрещено:</strong></p><ul><li>>1 поддона в ячейку</li><li>Складирование друг на друга</li><li>>4 наименований</li><li>Высота >160 см</li></ul><div class="photo-gallery"><img src="Поддонка 1.jpg" alt="1"><img src="Поддонка 2.jpg" alt="2"></div>'},
-    {id:"safe",title:"🔒 7. Сейфовое размещение",content:'<p><strong>Только с Face ID.</strong></p><p>Категории:</p><ul><li>Смартфоны, гаджеты от 500₽</li><li>Фото/видео от 500₽</li><li>Консоли, наушники от 1000₽</li><li>Оргтехника от 2000₽</li><li>Power Bank, флешки от 1000₽</li><li>Зажигалки (кроме пустых)</li><li>Часы, бижутерия от 500₽</li><li>Парфюм от 5000₽</li><li>Инструменты от 5000₽</li><li>Одежда от 1000₽</li><li>Обувь от 1500₽</li><li>Фены от 15000₽</li><li>Ножи, пневматика</li><li>Сертификаты, сим-карты, монеты — всегда</li></ul><div class="photo-gallery"><img src="СейфFaceID 1.jpg" alt="1"><img src="СейфFaceID 2.jpg" alt="2"></div>'},
-    {id:"dangerous",title:"☣️ 8. Потенциально опасные товары",content:'<div class="note"><i class="fas fa-skull-crossbones"></i> <strong>Опасные грузы:</strong><br><ul><li>Легковоспламеняющиеся жидкости</li><li>Едкие вещества</li><li>Газовые баллончики</li></ul>⚠️ Запрещено с обычными товарами без спецмаркировки.</div><div class="photo-gallery"><img src="ГСМ.jpg" alt="ГСМ"></div>'}
-];const NOVELTIES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
-const STOPZONES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
-let currentTab='regulations';
-function stripHtml(h){let d=document.createElement('div');d.innerHTML=h;return d.textContent||''}
-function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m])}
-function formatTime(d){return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
-function renderRegulations(){
-    document.getElementById('sidebarContainer').style.display='block';
-    let c=document.getElementById('contentArea');c.innerHTML='';
-    sections.forEach(s=>{
-        let card=document.createElement('div');card.className='card';card.id=s.id;
-        card.setAttribute('data-fulltext',(s.title+' '+stripHtml(s.content)).toLowerCase());
-        card.innerHTML='<h2>'+s.title+'</h2>'+s.content;
-        c.appendChild(card);
-    });
-    buildTOC();
-}
-function buildTOC(){
-    let l=document.getElementById('tableOfContents');l.innerHTML='';
-    sections.forEach(s=>{
-        let li=document.createElement('li'),a=document.createElement('a');
-        a.href='#';a.textContent=s.title;
-        a.addEventListener('click',e=>{e.preventDefault();document.getElementById(s.id)?.scrollIntoView({behavior:'smooth'})});
-        li.appendChild(a);l.appendChild(li);
-    });
-}
-async function renderNovelties(){
-    document.getElementById('sidebarContainer').style.display='none';
-    document.getElementById('contentArea').innerHTML='<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>';
-    await loadNoveltiesData();
-}
-async function loadNoveltiesData(){
-    let cd=document.getElementById('novelties-content'),fd=document.getElementById('novelties-footer');
-    if(!cd)return;
-    try{
-        let r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
-        let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
-        if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        let active=rows.slice(1).filter(row=>{let c=row.split('\t');let s=(c[3]||'').trim().toLowerCase();let w=(c[4]||'').trim().toLowerCase();return (s==='актуально'||s==='актуальная')&&(w==='для сотрудников'||w==='сотрудники'||w==='');});
-        if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Все обработаны.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
-        let h='';
-        active.forEach(row=>{let c=row.split('\t');if(c.length<3)return;h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?.trim())+'</div><div class="novelty-title">'+escapeHtml(c[1]?.trim())+'</div><div class="novelty-desc">'+escapeHtml(c[2]?.trim())+'</div><span class="novelty-badge">'+escapeHtml(c[3]?.trim()||'Актуально')+'</span></div>'});
-        cd.innerHTML=h;fd.textContent='🔄 Обновлено: '+formatTime(new Date());
-    }catch(e){cd.innerHTML='<div class="novelties-error">❌ Ошибка загрузки.</div>'}
-}
-async function renderStopZones(){
-    document.getElementById('sidebarContainer').style.display='none';
-    document.getElementById('contentArea').innerHTML='<div class="stopzones-container"><div class="stopzones-header"><i class="fas fa-stop-circle"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>';
-    await loadStopZonesData();
-}
-async function loadStopZonesData(){
-    let cd=document.getElementById('stopzones-content'),fd=document.getElementById('stopzones-footer');
-    if(!cd)return;
-    try{
-        let r=await fetch(STOPZONES_URL);if(!r.ok)throw new Error();
-        let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
-        if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Стоп-зон нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        let floors={},cf=null;
-        rows.slice(1).forEach(row=>{let c=row.split('\t'),f=(c[0]||'').trim(),s=(c[1]||'').trim();if(!f)return;if(f.toLowerCase().includes('этаж')||f.toLowerCase().includes('поддон')){cf=f;if(!floors[cf])floors[cf]={name:f,zones:[]}}else if(cf)floors[cf].zones.push({zone:f,reason:s||'Стоп размещение'})});
-        let fk=Object.keys(floors).filter(k=>floors[k].zones.length);
-        if(!fk.length){cd.innerHTML='<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
-        let h='';
-        fk.forEach(k=>{let fl=floors[k];h+='<div class="stopzone-floor"><div class="stopzone-floor-title">📍 '+escapeHtml(fl.name)+'</div><div class="stopzone-list">';fl.zones.forEach(z=>h+='<div class="stopzone-item"><span class="stopzone-zone">'+escapeHtml(z.zone)+'</span><span class="stopzone-reason">'+escapeHtml(z.reason)+'</span></div>');h+='</div></div>'});
-        cd.innerHTML=h;fd.textContent='🔄 Обновлено: '+formatTime(new Date());
-    }catch(e){cd.innerHTML='<div class="novelties-error">❌ Ошибка загрузки.</div>'}
-}
-function switchTab(t){
-    currentTab=t;
-    document.querySelectorAll('.nav-item').forEach(b=>{b.classList.remove('active');if(b.dataset.tab===t)b.classList.add('active')});
-    if(t==='regulations')renderRegulations();else if(t==='novelties')renderNovelties();else if(t==='stopzones')renderStopZones();
-}
-function performSearch(){
-    if(currentTab!=='regulations'){switchTab('regulations');setTimeout(performSearch,300);return}
-    let q=document.getElementById('searchInput').value.trim().toLowerCase();
-    document.getElementById('noResultsMsg')?.remove();
-    document.querySelectorAll('.card').forEach(c=>{c.querySelectorAll('.highlight').forEach(m=>{let p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize()})});
-    if(!q){document.querySelectorAll('.card').forEach(c=>c.style.display='block');return}
-    let found=false;
-    document.querySelectorAll('.card').forEach(c=>{if((c.dataset.fulltext||'').includes(q)){c.style.display='block';highlightInCard(c,q);found=true}else c.style.display='none'});
-    if(!found){let m=document.createElement('div');m.id='noResultsMsg';m.className='note';m.style.textAlign='center';m.innerHTML='<i class="fas fa-search-minus"></i> Ничего не найдено.';document.getElementById('contentArea').appendChild(m)}
-}
-function highlightInCard(card,q){
-    let w=document.createTreeWalker(card,NodeFilter.SHOW_TEXT,{acceptNode:n=>['SCRIPT','STYLE','MARK'].includes(n.parentElement?.tagName)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}),nr=[];
-    while(w.nextNode()){if(w.currentNode.textContent.toLowerCase().includes(q))nr.push(w.currentNode)}
-    nr.forEach(n=>{let s=document.createElement('span');s.innerHTML=n.textContent.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="highlight">$1</mark>');n.parentNode.replaceChild(s,n)});
-}
-document.addEventListener('DOMContentLoaded',()=>{
-    switchTab('regulations');
-    document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{let t=b.dataset.tab;if(t)switchTab(t)}));
-    document.getElementById('searchBtn').addEventListener('click',performSearch);
-    document.getElementById('searchInput').addEventListener('keyup',e=>{if(e.key==='Enter')performSearch()});
-    let ly=window.scrollY;
-    window.addEventListener('scroll',()=>{let cy=window.scrollY,h=document.getElementById('stickyHeader');if(cy>ly&&cy>80)h.classList.add('hidden');else h.classList.remove('hidden');ly=cy});
-    setInterval(()=>{if(currentTab==='novelties')loadNoveltiesData();if(currentTab==='stopzones')loadStopZonesData()},300000);
-});
-window.addEventListener('load',()=>{setTimeout(()=>{let s=document.getElementById('splash-screen');if(s){s.classList.add('hidden');setTimeout(()=>s?.remove(),600)}},1500)});
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
-</script>
-</body>
-</html>const NOVELTIES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
-const STOPZONES_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
-let currentTab='regulations';
-function stripHtml(h){let d=document.createElement('div');d.innerHTML=h;return d.textContent||''}
-function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m])}
-function formatTime(d){return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
-function renderRegulations(){
-    document.getElementById('sidebarContainer').style.display='block';
-    let c=document.getElementById('contentArea');c.innerHTML='';
-    sections.forEach(s=>{
-        let card=document.createElement('div');card.className='card';card.id=s.id;
-        card.setAttribute('data-fulltext',(s.title+' '+stripHtml(s.content)).toLowerCase());
-        card.innerHTML='<h2>'+s.title+'</h2>'+s.content;
-        c.appendChild(card);
-    });
-    buildTOC();
-}
-function buildTOC(){
-    let l=document.getElementById('tableOfContents');l.innerHTML='';
-    sections.forEach(s=>{
-        let li=document.createElement('li'),a=document.createElement('a');
-        a.href='#';a.textContent=s.title;
-        a.addEventListener('click',e=>{e.preventDefault();document.getElementById(s.id)?.scrollIntoView({behavior:'smooth'})});
-        li.appendChild(a);l.appendChild(li);
-    });
-}
-async function renderNovelties(){
-    document.getElementById('sidebarContainer').style.display='none';
-    document.getElementById('contentArea').innerHTML='<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>';
-    await loadNoveltiesData();
-}
-async function loadNoveltiesData(){
-    let cd=document.getElementById('novelties-content'),fd=document.getElementById('novelties-footer');
-    if(!cd)return;
-    try{
-        let r=await fetch(NOVELTIES_URL);if(!r.ok)throw new Error();
-        let t=await r.text();let rows=t.trim().split('\n').filter(l=>l.trim());
-        if(rows.length<2){cd.innerHTML='<div class="novelties-empty">📭 Нововведений пока нет</div>';fd.textContent='Проверено: '+formatTime(new Date());return}
-        let active=rows.slice(1).filter(row=>{let s=(row.split('\t')[3]||'').trim().toLowerCase();return s==='актуально'||s==='актуальная'||s==='новое'});
-        if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Все обработаны.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
+        if(!active.length){cd.innerHTML='<div class="novelties-empty">✅ Нет актуальных нововведений для сотрудников.</div>';fd.textContent='Обновлено: '+formatTime(new Date());return}
         let h='';
         active.forEach(row=>{let c=row.split('\t');if(c.length<3)return;h+='<div class="novelty-card"><div class="novelty-date">📅 '+escapeHtml(c[0]?.trim())+'</div><div class="novelty-title">'+escapeHtml(c[1]?.trim())+'</div><div class="novelty-desc">'+escapeHtml(c[2]?.trim())+'</div><span class="novelty-badge">'+escapeHtml(c[3]?.trim()||'Актуально')+'</span></div>'});
         cd.innerHTML=h;fd.textContent='🔄 Обновлено: '+formatTime(new Date());
