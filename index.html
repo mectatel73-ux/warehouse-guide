@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Справочник сотрудника склада | Магнит Маркет</title>
     
-    <!-- PWA / Web App -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,12 +13,10 @@
     <meta name="theme-color" content="#c41e1e">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             background: #fdf5f5;
@@ -27,7 +24,6 @@
             line-height: 1.5;
             padding-bottom: 70px;
         }
-
         .sticky-header {
             position: sticky;
             top: 0;
@@ -82,7 +78,6 @@
             transition: 0.2s;
         }
         .search-bar button:hover { background: #4a2020; }
-
         .container {
             display: flex;
             max-width: 1400px;
@@ -153,14 +148,27 @@
             margin: 0.8rem 0;
         }
         .highlight { background-color: #ffd4d4; padding: 2px 4px; border-radius: 4px; }
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .photo-gallery img {
+            max-width: 280px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .photo-gallery img:hover { transform: scale(1.02); }
         footer {
             text-align: center;
             margin: 2rem 0 0;
             font-size: 0.8rem;
             color: #8a6e6e;
         }
-
-        /* === НИЖНЕЕ МЕНЮ === */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -180,14 +188,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             gap: 4px;
             background: none;
             border: none;
             cursor: pointer;
             padding: 6px 12px;
             border-radius: 32px;
-            transition: 0.2s;
             font-size: 0.75rem;
             color: #8a6e6e;
             font-weight: 500;
@@ -198,32 +204,18 @@
         .nav-item.active { background: #ffe8e8; color: #a01010; }
         .nav-item.active i { color: #a01010; }
 
-        /* === ЭКРАН ЗАГРУЗКИ === */
+        /* SPLASH */
         #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #c41e1e, #8b0000);
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-        #splash-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; }
         #splash-screen img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+            border: 4px solid white; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             animation: splashPulse 2s ease-in-out infinite;
         }
         @keyframes splashPulse {
@@ -231,30 +223,17 @@
             50% { transform: scale(1.08); }
         }
         #splash-screen .splash-text {
-            color: white;
-            margin-top: 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            opacity: 0;
+            color: white; margin-top: 20px; font-size: 1.2rem; font-weight: 600;
+            letter-spacing: 2px; opacity: 0;
             animation: splashFadeIn 1s ease 0.5s forwards;
         }
-        @keyframes splashFadeIn {
-            to { opacity: 1; }
-        }
+        @keyframes splashFadeIn { to { opacity: 1; } }
         #splash-screen .splash-loader {
-            width: 60px;
-            height: 3px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            margin-top: 24px;
-            overflow: hidden;
+            width: 60px; height: 3px; background: rgba(255,255,255,0.3);
+            border-radius: 10px; margin-top: 24px; overflow: hidden;
         }
         #splash-screen .splash-loader-bar {
-            width: 40%;
-            height: 100%;
-            background: white;
-            border-radius: 10px;
+            width: 40%; height: 100%; background: white; border-radius: 10px;
             animation: splashLoading 1.5s ease-in-out infinite;
         }
         @keyframes splashLoading {
@@ -262,114 +241,48 @@
             100% { transform: translateX(250%); }
         }
 
-        /* === СТИЛИ ДЛЯ НОВОВВЕДЕНИЙ === */
+        /* NOVELTIES */
         .novelties-container { padding: 0; }
         .novelties-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #c41e1e;
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px solid #c41e1e;
         }
         .novelties-header i { font-size: 1.8rem; color: #c41e1e; }
         .novelties-header h2 { margin: 0; color: #a01010; font-size: 1.5rem; }
         .novelty-card {
-            background: #fffafa;
-            border-left: 4px solid #c41e1e;
-            border-radius: 12px;
-            padding: 1rem 1.2rem;
-            margin-bottom: 1rem;
-            transition: 0.2s;
+            background: #fffafa; border-left: 4px solid #c41e1e; border-radius: 12px;
+            padding: 1rem 1.2rem; margin-bottom: 1rem;
         }
-        .novelty-card:hover { box-shadow: 0 2px 8px rgba(180,30,30,0.1); }
-        .novelty-date {
-            font-size: 0.8rem;
-            color: #c41e1e;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-        .novelty-title {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: #4a0000;
-            margin-bottom: 0.3rem;
-        }
-        .novelty-desc {
-            font-size: 0.9rem;
-            color: #444;
-            line-height: 1.5;
-        }
+        .novelty-date { font-size: 0.8rem; color: #c41e1e; font-weight: 600; margin-bottom: 0.3rem; }
+        .novelty-title { font-weight: 700; font-size: 1.05rem; color: #4a0000; margin-bottom: 0.3rem; }
+        .novelty-desc { font-size: 0.9rem; color: #444; }
         .novelty-badge {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
+            display: inline-block; background: #e8f5e9; color: #2e7d32;
+            padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-top: 0.5rem;
         }
-        .novelties-footer {
-            margin-top: 1rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid #f5e5e5;
-            text-align: right;
-            font-size: 0.75rem;
-            color: #999;
-        }
-        .novelties-loading, .novelties-error, .novelties-empty {
-            text-align: center;
-            padding: 2rem;
-            color: #666;
-        }
+        .novelties-footer { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid #f5e5e5; text-align: right; font-size: 0.75rem; color: #999; }
+        .novelties-loading, .novelties-error, .novelties-empty { text-align: center; padding: 2rem; color: #666; }
         .novelties-error { color: #c41e1e; }
 
-        /* === СТИЛИ ДЛЯ СТОП-ЗОН === */
+        /* STOP ZONES */
         .stopzones-container { padding: 0; }
         .stopzones-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #d32f2f;
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px solid #d32f2f;
         }
         .stopzones-header i { font-size: 1.8rem; color: #d32f2f; }
         .stopzones-header h2 { margin: 0; color: #a01010; font-size: 1.5rem; }
         .stopzone-alert {
-            background: #fff0f0;
-            border-left: 4px solid #ff6f00;
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-            color: #a01010;
+            background: #fff0f0; border-left: 4px solid #ff6f00; padding: 0.8rem 1rem;
+            border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem; color: #a01010;
         }
         .stopzone-floor {
-            background: #fafafa;
-            border-radius: 8px;
-            margin-bottom: 0.8rem;
-            overflow: hidden;
-            border: 1px solid #f5e5e5;
+            background: #fafafa; border-radius: 8px; margin-bottom: 0.8rem;
+            overflow: hidden; border: 1px solid #f5e5e5;
         }
-        .stopzone-floor-title {
-            background: #c41e1e;
-            color: white;
-            padding: 0.6rem 1rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .stopzone-list {
-            padding: 0.5rem 1rem;
-        }
-        .stopzone-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.4rem 0;
-            border-bottom: 1px solid #fdf0f0;
-            font-size: 0.85rem;
-        }
+        .stopzone-floor-title { background: #c41e1e; color: white; padding: 0.6rem 1rem; font-weight: 600; font-size: 0.9rem; }
+        .stopzone-list { padding: 0.5rem 1rem; }
+        .stopzone-item { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #fdf0f0; font-size: 0.85rem; }
         .stopzone-item:last-child { border-bottom: none; }
         .stopzone-zone { font-family: monospace; font-weight: 600; color: #333; }
         .stopzone-reason { color: #c41e1e; font-weight: 500; font-size: 0.8rem; }
@@ -382,26 +295,23 @@
             .header-content { flex-direction: column; align-items: stretch; }
             .content { padding: 1rem; }
             .card h2 { font-size: 1.3rem; }
+            .photo-gallery img { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<!-- Экран загрузки -->
 <div id="splash-screen">
     <img src="1777931118.png" alt="Магнит Маркет">
     <div class="splash-text">МАГНИТ МАРКЕТ</div>
-    <div class="splash-loader">
-        <div class="splash-loader-bar"></div>
-    </div>
+    <div class="splash-loader"><div class="splash-loader-bar"></div></div>
 </div>
 
-<!-- Шапка -->
 <header class="sticky-header" id="stickyHeader">
     <div class="header-content">
         <div>
             <h1>
-                <img src="1777931118.png" alt="Магнит Маркет" style="height: 36px; vertical-align: middle; border-radius: 50%; margin-right: 8px;">
+                <img src="1777931118.png" alt="Магнит Маркет" style="height:36px;vertical-align:middle;border-radius:50%;margin-right:8px;">
                 Справочник сотрудника склада
             </h1>
             <p>Магнит Маркет — регламент размещения, хранения и безопасности товара</p>
@@ -419,192 +329,154 @@
         <h3><i class="fas fa-list-ul"></i> Содержание</h3>
         <ul id="tableOfContents"></ul>
     </div>
-    
     <div class="content" id="contentArea"></div>
 </div>
 
-<footer>
-    <i class="fas fa-sync-alt"></i> Версия 1.0 · При обнаружении ошибок сообщите старшему смены
-</footer>
+<footer><i class="fas fa-sync-alt"></i> Версия 1.0 · При обнаружении ошибок сообщите старшему смены</footer>
 
 <div class="bottom-nav">
-    <button class="nav-item active" data-tab="regulations">
-        <i class="fas fa-book-open"></i>
-        <span>Регламенты</span>
-    </button>
-    <button class="nav-item" data-tab="stopzones">
-        <i class="fas fa-stop-circle"></i>
-        <span>Стоп-зоны</span>
-    </button>
-    <button class="nav-item" data-tab="novelties">
-        <i class="fas fa-newspaper"></i>
-        <span>Нововведения</span>
-    </button>
+    <button class="nav-item active" data-tab="regulations"><i class="fas fa-book-open"></i><span>Регламенты</span></button>
+    <button class="nav-item" data-tab="stopzones"><i class="fas fa-stop-circle"></i><span>Стоп-зоны</span></button>
+    <button class="nav-item" data-tab="novelties"><i class="fas fa-newspaper"></i><span>Нововведения</span></button>
 </div>
 
 <script>
-    const sections = [
-        { id: "welcome", title: "🏠 Введение", content: `<p>Данный регламент описывает требования по размещению и хранению товара на складе Магнит Маркет, с целью увеличения скорости сборки и снижения рисков потери и повреждения товара.</p><p>Товар должен быть расположен по ячейкам хранения так, чтобы в дальнейшем не пришлось изыскивать дополнительных площадей. Рабочее пространство не должно быть захламлено.</p>` },
-        { id: "rule-scan-zone", title: "📱 1.1 Сканирование зоны работы", content: `<p><strong>Для начала размещения необходимо:</strong></p><ul><li>Зайти в программу «PickApp»</li><li>Отсканировать зону работы</li><li>Отсканировать штрихкод грузоместа или акта целиком</li></ul>` },
-        { id: "rule-scan-sku", title: "📦 1.2 Сканирование SKU и ячейки", content: `<p>После сканирования зоны:</p><ul><li>Отсканируйте штрихкод (SKU) товара</li><li>Укажите количество</li><li>Отсканируйте ячейку</li></ul><p>Вы можете посмотреть список товаров, которые разместили или осталось разместить.</p>` },
-        { id: "rule-check", title: "🔍 1.3 Сверка ШК и пересчёт", content: `<p>Перед размещением товар проходит процедуру пересчёта.<br>✅ <strong>Сверка ШК товара с Актом приема-передачи ОБЯЗАТЕЛЬНА.</strong></p>` },
-        { id: "rule-packing", title: "🧱 1.4 Требования к упаковке", content: `<ul><li>Сыпучие, острые, магнитные товары — в плотной упаковке</li><li>Жидкие — вертикально</li><li>Хрупкие — строго в индивидуальной упаковке</li><li>Тяжелые — в нижние ячейки, легкие — в верхние</li><li>ШК должен быть виден</li><li>Размещать согласно габаритам: мелко-, средне-, крупногабаритные ячейки</li></ul>` },
-        { id: "floors", title: "🏢 2. Этажи склада", content: `<ul><li><strong>1 этаж:</strong> сыпучие, жидкие, тяжёлые, нестандартные (по согласованию)</li><li><strong>2 этаж:</strong> крупногабарит (>13 701 см³)</li><li><strong>3 этаж:</strong> Сейф + ЭКО</li><li><strong>4–6 этажи:</strong> остальные категории</li></ul>` },
-        { id: "shelf-1", title: "🟦 3.1 Первая полка", content: `<p>Крупногабарит: 3420 – 13700 см³. Также обувь.<br>Допускается деление товара на несколько ячеек при личном пересчете.</p>` },
-        { id: "shelf-2", title: "👕 3.2 Вторая полка", content: `<p><strong>ТОЛЬКО Одежда и Обувь.</strong> Другой товар ЗАПРЕЩЁН!</p>` },
-        { id: "shelf-3", title: "🟩 3.3 Третья полка", content: `<p>Небольшие товары: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть пластиковый короб — ТОЛЬКО мелкоштучный товар.</p>` },
-        { id: "shelf-4", title: "🟨 3.4 Четвертая полка", content: `<p>Мелкоштучный товар: 0 – 170 см³, макс. сторона ≤15 см. В пластиковые короба.</p>` },
-        { id: "shelf-5", title: "🟧 3.5 Пятая полка", content: `<p>Как третья полка: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть короб — ТОЛЬКО мелкоштучный товар.</p>` },
-        { id: "shelf-6", title: "🟥 3.6 Шестая полка", content: `<p>Товары: 1001 – 3419 см³, вес ≤3 кг, макс. сторона ≤40 см.<br>Также: обувь, верхняя одежда.<br>⚖️ Тяжёлые — по краям, лёгкие — в центр. Общий вес ≤35 кг.</p>` },
-        { id: "forbidden", title: "⛔ 4. Строго запрещено", content: `<ul><li>2 одинаковых товара с разными ШК в одной ячейке</li><li>Товар в коробке (вынимать по возможности)</li><li>В пакетах, резинках, с накладной</li><li>Крупный сверху на мелкий</li><li>Вторым рядом</li><li>Поверх уже существующего</li><li>>35 кг на полку</li><li>Тяжёлый в центр</li><li>Без упаковки / повреждённая упаковка</li><li>Скользкие друг на друга</li></ul>` },
-        { id: "large-size", title: "🖼️ 5. Крупногабаритный товар", content: `<p>2 этаж: >13 701 см³ или сторона >40 см.<br>Также: Картины, Холсты, Автоковры, Телевизоры.<br>❗ Картины и холсты — строго вертикально, ШК к проходу. Если невозможно — обратиться к ст. специалисту.</p>` },
-        { id: "pallet", title: "🚜 6. Поддонное размещение", content: `<p>Допускается для больших партий или крупногабарита.</p><p><strong>Запрещено:</strong></p><ul><li>>1 поддона в ячейку</li><li>Складирование друг на друга</li><li>>4 наименований на поддон</li><li>Высота >160 см</li></ul>` },
-        { id: "safe", title: "🔒 7. Сейфовое размещение", content: `<p><strong>Только ответственные сотрудники с допуском Face ID.</strong></p><p>Категории товаров в сейф:</p><ul><li>Смартфоны, гаджеты от 500 руб.</li><li>Фото/видео техника от 500 руб.</li><li>Консоли, наушники от 1000 руб.</li><li>Оргтехника от 2000 руб.</li><li>Power Bank, флешки от 1000 руб.</li><li>Зажигалки (кроме кухонных пустых)</li><li>Часы, бижутерия от 500 руб.</li><li>Парфюм от 5000 руб.</li><li>Инструменты от 5000 руб.</li><li>Одежда от 1000–1500 руб. (ALGA — вся)</li><li>Обувь от 1500 руб. или в коробках</li><li>Фены от 15 000 руб.</li><li>Ножи (кроме канцелярских)</li><li>Пневматика, арбалеты, луки</li><li>Автоаксессуары от 1500 руб.</li><li>Сертификаты, сим-карты, монеты — НЕЗАВИСИМО от стоимости</li></ul>` },
-        { id: "dangerous", title: "☣️ 8. Потенциально опасные товары", content: `<div class="note"><i class="fas fa-skull-crossbones"></i> <strong>Опасные грузы:</strong> правила обращения с ними выдаются руководителем смены.<br><ul><li>Легковоспламеняющиеся жидкости (лаки, растворители)</li><li>Едкие вещества (кислоты, щёлочи)</li><li>Газовые баллончики (спреи, аэрозоли)</li></ul>⚠️ <strong>Запрещено размещение вместе с обычными товарами без спецмаркировки.</strong></div>` }
-    ];
+const sections = [
+    { id: "welcome", title: "🏠 Введение", content: `<p>Данный регламент описывает требования по размещению и хранению товара на складе Магнит Маркет, с целью увеличения скорости сборки и снижения рисков потери и повреждения товара.</p><p>Товар должен быть расположен по ячейкам хранения так, чтобы в дальнейшем не пришлось изыскивать дополнительных площадей. Рабочее пространство не должно быть захламлено.</p>` },
+    { id: "rule-scan-zone", title: "📱 1.1 Сканирование зоны работы", content: `<p><strong>Для начала размещения необходимо:</strong></p><ul><li>Зайти в программу «PickApp»</li><li>Отсканировать зону работы</li><li>Отсканировать штрихкод грузоместа или акта целиком</li></ul><div class="photo-gallery"><img src="Зайти в программу.jpg" alt="Зайти в программу"><img src="Зона работы.jpg" alt="Зона работы"><img src="отсканировать штрихкод акта целиком, если уже подано на размещение.jpg" alt="Отсканировать акт"><img src="отсканировать штрихкоды грузомета, если подано на размещение.jpg" alt="Грузоместо"></div>` },
+    { id: "rule-scan-sku", title: "📦 1.2 Сканирование SKU и ячейки", content: `<p>После сканирования зоны:</p><ul><li>Отсканируйте штрихкод (SKU) товара</li><li>Укажите количество</li><li>Отсканируйте ячейку</li></ul><p>Вы можете посмотреть список товаров, которые разместили или осталось разместить.</p><div class="photo-gallery"><img src="требуется отсканировать штрихкод (SKU) товара.jpg" alt="SKU"><img src="после сканирования штрихкода можно увидеть количество товара и все данные.jpg" alt="Данные"><img src="помимо этого, вы можете посмотреть список товаров, которые разместили.jpg" alt="Список"><img src="Подано на размещение 1.jpg" alt="Подано 1"><img src="Подано на размещение 2.jpg" alt="Подано 2"></div>` },
+    { id: "rule-check", title: "🔍 1.3 Сверка ШК и пересчёт", content: `<p>Перед размещением товар проходит процедуру пересчёта.<br>✅ <strong>Сверка ШК товара с Актом приема-передачи ОБЯЗАТЕЛЬНА.</strong></p>` },
+    { id: "rule-packing", title: "🧱 1.4 Требования к упаковке", content: `<ul><li>Сыпучие, острые, магнитные — в плотной упаковке</li><li>Жидкие — вертикально</li><li>Хрупкие — строго в индивидуальной упаковке</li><li>Тяжелые — в нижние ячейки, легкие — в верхние</li><li>ШК должен быть виден</li><li>Размещать согласно габаритам: мелко-, средне-, крупногабаритные ячейки</li></ul>` },
+    { id: "floors", title: "🏢 2. Этажи склада", content: `<ul><li><strong>1 этаж:</strong> сыпучие, жидкие, тяжёлые, нестандартные</li><li><strong>2 этаж:</strong> крупногабарит (>13 701 см³)</li><li><strong>3 этаж:</strong> Сейф + ЭКО</li><li><strong>4–6 этажи:</strong> остальные категории</li></ul><div class="photo-gallery"><img src="2 этаж.jpg" alt="2 этаж"><img src="2 этаж спец рядом.jpg" alt="Спец ряд"><img src="ГСМ.jpg" alt="ГСМ"></div>` },
+    { id: "shelf-1", title: "🟦 3.1 Первая полка", content: `<p>Крупногабарит: 3420 – 13700 см³. Также обувь.<br>Допускается деление товара на несколько ячеек при личном пересчете.</p><div class="photo-gallery"><img src="Первая полка 1.jpg" alt="Первая полка 1"><img src="Первая полка 2.jpg" alt="Первая полка 2"></div>` },
+    { id: "shelf-2", title: "👕 3.2 Вторая полка", content: `<p><strong>ТОЛЬКО Одежда и Обувь.</strong> Другой товар ЗАПРЕЩЁН!</p><div class="photo-gallery"><img src="Полка 2.jpg" alt="Вторая полка"></div>` },
+    { id: "shelf-3", title: "🟩 3.3 Третья полка", content: `<p>Небольшие товары: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть пластиковый короб — ТОЛЬКО мелкоштучный товар.</p><div class="photo-gallery"><img src="Третья полка.jpg" alt="Третья полка 1"><img src="Третья полка 2.jpg" alt="Третья полка 2"></div>` },
+    { id: "shelf-4", title: "🟨 3.4 Четвертая полка", content: `<p>Мелкоштучный товар: 0 – 170 см³, макс. сторона ≤15 см. В пластиковые короба.</p><div class="photo-gallery"><img src="четвертая полка 1.jpg" alt="Четвертая 1"><img src="четвертая полка 2.jpg" alt="Четвертая 2"></div>` },
+    { id: "shelf-5", title: "🟧 3.5 Пятая полка", content: `<p>Как третья полка: 171 – 1000 см³, макс. сторона ≤40 см.<br>Если есть короб — ТОЛЬКО мелкоштучный товар.</p><div class="photo-gallery"><img src="Пятая полку.jpg" alt="Пятая 1"><img src="Пятая полка 2.jpg" alt="Пятая 2"></div>` },
+    { id: "shelf-6", title: "🟥 3.6 Шестая полка", content: `<p>Товары: 1001 – 3419 см³, вес ≤3 кг, макс. сторона ≤40 см.<br>Также: обувь, верхняя одежда.<br>⚖️ Тяжёлые — по краям, лёгкие — в центр. Общий вес ≤35 кг.</p><div class="photo-gallery"><img src="шестая полку.jpg" alt="Шестая 1"><img src="шестая полка 2.jpg" alt="Шестая 2"></div>` },
+    { id: "forbidden", title: "⛔ 4. Строго запрещено", content: `<ul><li>2 одинаковых товара с разными ШК в одной ячейке</li><li>Товар в коробке (вынимать)</li><li>В пакетах, резинках, с накладной</li><li>Крупный сверху на мелкий</li><li>Вторым рядом</li><li>Поверх существующего</li><li>>35 кг на полку</li><li>Тяжёлый в центр</li><li>Без упаковки / повреждённая</li><li>Скользкие друг на друга</li></ul>` },
+    { id: "large-size", title: "🖼️ 5. Крупногабаритный товар", content: `<p>2 этаж: >13 701 см³ или сторона >40 см.<br>Также: Картины, Холсты, Автоковры, Телевизоры.<br>❗ Картины и холсты — строго вертикально, ШК к проходу.</p>` },
+    { id: "pallet", title: "🚜 6. Поддонное размещение", content: `<p>Допускается для больших партий.</p><p><strong>Запрещено:</strong></p><ul><li>>1 поддона в ячейку</li><li>Складирование друг на друга</li><li>>4 наименований</li><li>Высота >160 см</li></ul>` },
+    { id: "safe", title: "🔒 7. Сейфовое размещение", content: `<p><strong>Только с Face ID.</strong></p><p>Категории:</p><ul><li>Смартфоны, гаджеты от 500₽</li><li>Фото/видео от 500₽</li><li>Консоли, наушники от 1000₽</li><li>Оргтехника от 2000₽</li><li>Power Bank, флешки от 1000₽</li><li>Зажигалки (кроме пустых)</li><li>Часы, бижутерия от 500₽</li><li>Парфюм от 5000₽</li><li>Инструменты от 5000₽</li><li>Одежда от 1000₽</li><li>Обувь от 1500₽</li><li>Фены от 15000₽</li><li>Ножи, пневматика</li><li>Сертификаты, сим-карты, монеты — всегда</li></ul><div class="photo-gallery"><img src="СейфFaceID 1.jpg" alt="Сейф 1"><img src="СейфFaceID 2.jpg" alt="Сейф 2"></div>` },
+    { id: "dangerous", title: "☣️ 8. Потенциально опасные товары", content: `<div class="note"><i class="fas fa-skull-crossbones"></i> <strong>Опасные грузы:</strong><br><ul><li>Легковоспламеняющиеся жидкости</li><li>Едкие вещества</li><li>Газовые баллончики</li></ul>⚠️ Запрещено с обычными товарами без спецмаркировки.</div>` }
+];
 
-    const NOVELTIES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
-    const STOPZONES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
+const NOVELTIES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
+const STOPZONES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
 
-    let currentTab = 'regulations';
+let currentTab = 'regulations';
 
-    function stripHtml(html) {
-        let tmp = document.createElement('div');
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText || '';
-    }
+function stripHtml(html) { let d = document.createElement('div'); d.innerHTML = html; return d.textContent || ''; }
+function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+function formatTime(d) { return d.toLocaleString('ru-RU', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m] || m);
-    }
-
-    function formatTime(date) {
-        return date.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    }
-
-    function renderRegulations() {
-        const container = document.getElementById('contentArea');
-        document.getElementById('sidebarContainer').style.display = 'block';
-        container.innerHTML = '';
-        sections.forEach(section => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.id = section.id;
-            card.setAttribute('data-fulltext', (section.title + ' ' + stripHtml(section.content)).toLowerCase());
-            card.innerHTML = `<h2>${section.title}</h2>${section.content}`;
-            container.appendChild(card);
-        });
-        buildTOC();
-    }
-
-    function buildTOC() {
-        const tocList = document.getElementById('tableOfContents');
-        tocList.innerHTML = '';
-        sections.forEach(section => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = '#';
-            a.textContent = section.title;
-            a.addEventListener('click', (e) => { e.preventDefault(); document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' }); });
-            li.appendChild(a);
-            tocList.appendChild(li);
-        });
-    }
-
-    async function renderNovelties() {
-        document.getElementById('sidebarContainer').style.display = 'none';
-        document.getElementById('contentArea').innerHTML = `<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>`;
-        await loadNoveltiesData();
-    }
-
-    async function loadNoveltiesData() {
-        const cd = document.getElementById('novelties-content');
-        const fd = document.getElementById('novelties-footer');
-        if (!cd) return;
-        try {
-            const r = await fetch(NOVELTIES_URL);
-            if (!r.ok) throw new Error('');
-            const t = await r.text();
-            const rows = t.trim().split('\n').filter(l => l.trim());
-            if (rows.length < 2) { cd.innerHTML = '<div class="novelties-empty">📭 Нововведений пока нет</div>'; fd.textContent = 'Проверено: ' + formatTime(new Date()); return; }
-            const active = rows.slice(1).filter(row => { const s = (row.split('\t')[3]||'').trim().toLowerCase(); return s==='актуально'||s==='актуальная'||s==='новое'; });
-            if (active.length === 0) { cd.innerHTML = '<div class="novelties-empty">✅ Все нововведения обработаны.</div>'; fd.textContent = 'Обновлено: ' + formatTime(new Date()); return; }
-            let h = '';
-            active.forEach(row => { const c = row.split('\t'); if(c.length<3) return; h += `<div class="novelty-card"><div class="novelty-date">📅 ${escapeHtml(c[0]?.trim())}</div><div class="novelty-title">${escapeHtml(c[1]?.trim())}</div><div class="novelty-desc">${escapeHtml(c[2]?.trim())}</div><span class="novelty-badge">${escapeHtml(c[3]?.trim()||'Актуально')}</span></div>`; });
-            cd.innerHTML = h;
-            fd.textContent = '🔄 Обновлено: ' + formatTime(new Date());
-        } catch(e) { cd.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки.</div>'; }
-    }
-
-    async function renderStopZones() {
-        document.getElementById('sidebarContainer').style.display = 'none';
-        document.getElementById('contentArea').innerHTML = `<div class="stopzones-container"><div class="stopzones-header"><i class="fas fa-stop-circle"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>`;
-        await loadStopZonesData();
-    }
-
-    async function loadStopZonesData() {
-        const cd = document.getElementById('stopzones-content');
-        const fd = document.getElementById('stopzones-footer');
-        if (!cd) return;
-        try {
-            const r = await fetch(STOPZONES_URL);
-            if (!r.ok) throw new Error('');
-            const t = await r.text();
-            const rows = t.trim().split('\n').filter(l => l.trim());
-            if (rows.length < 2) { cd.innerHTML = '<div class="novelties-empty">📭 Стоп-зон нет</div>'; fd.textContent = 'Проверено: ' + formatTime(new Date()); return; }
-            const floors = {}; let cf = null;
-            rows.slice(1).forEach(row => { const c = row.split('\t'); const f = (c[0]||'').trim(); const s = (c[1]||'').trim(); if(!f) return; if(f.toLowerCase().includes('этаж')||f.toLowerCase().includes('поддон')) { cf = f; if(!floors[cf]) floors[cf] = {name:f, zones:[]}; } else if(cf) { floors[cf].zones.push({zone:f, reason:s||'Стоп размещение'}); } });
-            const fk = Object.keys(floors).filter(k => floors[k].zones.length > 0);
-            if (fk.length === 0) { cd.innerHTML = '<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны.</div>'; fd.textContent = 'Обновлено: ' + formatTime(new Date()); return; }
-            let h = '';
-            fk.forEach(k => { const fl = floors[k]; h += `<div class="stopzone-floor"><div class="stopzone-floor-title">📍 ${escapeHtml(fl.name)}</div><div class="stopzone-list">`; fl.zones.forEach(z => h += `<div class="stopzone-item"><span class="stopzone-zone">${escapeHtml(z.zone)}</span><span class="stopzone-reason">${escapeHtml(z.reason)}</span></div>`); h += '</div></div>'; });
-            cd.innerHTML = h;
-            fd.textContent = '🔄 Обновлено: ' + formatTime(new Date());
-        } catch(e) { cd.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки стоп-зон.</div>'; }
-    }
-
-    function switchTab(tabName) {
-        currentTab = tabName;
-        document.querySelectorAll('.nav-item').forEach(b => { b.classList.remove('active'); if(b.getAttribute('data-tab')===tabName) b.classList.add('active'); });
-        if(tabName==='regulations') renderRegulations();
-        else if(tabName==='novelties') renderNovelties();
-        else if(tabName==='stopzones') renderStopZones();
-    }
-
-    function performSearch() {
-        if(currentTab!=='regulations') { switchTab('regulations'); setTimeout(performSearch, 300); return; }
-        const q = document.getElementById('searchInput').value.trim().toLowerCase();
-        document.getElementById('noResultsMsg')?.remove();
-        document.querySelectorAll('.card').forEach(c => { c.querySelectorAll('.highlight').forEach(m => { const p=m.parentNode; p.replaceChild(document.createTextNode(m.textContent),m); p.normalize(); }); });
-        if(!q) { document.querySelectorAll('.card').forEach(c => c.style.display='block'); return; }
-        let found = false;
-        document.querySelectorAll('.card').forEach(c => { if((c.getAttribute('data-fulltext')||'').includes(q)) { c.style.display='block'; highlightInCard(c,q); found=true; } else c.style.display='none'; });
-        if(!found) { const m = document.createElement('div'); m.id='noResultsMsg'; m.className='note'; m.style.textAlign='center'; m.innerHTML='<i class="fas fa-search-minus"></i> Ничего не найдено.'; document.getElementById('contentArea').appendChild(m); }
-    }
-
-    function highlightInCard(card, query) {
-        const w = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement?.tagName==='SCRIPT'||n.parentElement?.tagName==='STYLE'||n.parentElement?.tagName==='MARK'?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT });
-        const nr = [];
-        while(w.nextNode()) { if(w.currentNode.textContent.toLowerCase().includes(query)) nr.push(w.currentNode); }
-        nr.forEach(n => { const s = document.createElement('span'); s.innerHTML = n.textContent.replace(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'), '<mark class="highlight">$1</mark>'); n.parentNode.replaceChild(s, n); });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        switchTab('regulations');
-        document.querySelectorAll('.nav-item').forEach(b => b.addEventListener('click', () => { const t = b.getAttribute('data-tab'); if(t) switchTab(t); }));
-        document.getElementById('searchBtn').addEventListener('click', performSearch);
-        document.getElementById('searchInput').addEventListener('keyup', e => { if(e.key==='Enter') performSearch(); });
-        let ly = window.scrollY;
-        window.addEventListener('scroll', () => { const cy = window.scrollY; const h = document.getElementById('stickyHeader'); if(cy>ly&&cy>80) h.classList.add('hidden'); else h.classList.remove('hidden'); ly=cy; });
-        setInterval(() => { if(currentTab==='novelties') loadNoveltiesData(); if(currentTab==='stopzones') loadStopZonesData(); }, 300000);
+function renderRegulations() {
+    document.getElementById('sidebarContainer').style.display = 'block';
+    const c = document.getElementById('contentArea'); c.innerHTML = '';
+    sections.forEach(s => {
+        const card = document.createElement('div'); card.className = 'card'; card.id = s.id;
+        card.setAttribute('data-fulltext', (s.title + ' ' + stripHtml(s.content)).toLowerCase());
+        card.innerHTML = `<h2>${s.title}</h2>${s.content}`;
+        c.appendChild(card);
     });
+    buildTOC();
+}
 
-    window.addEventListener('load', () => {
-        setTimeout(() => { const s = document.getElementById('splash-screen'); if(s) { s.classList.add('hidden'); setTimeout(() => s?.remove(), 600); } }, 1500);
+function buildTOC() {
+    const l = document.getElementById('tableOfContents'); l.innerHTML = '';
+    sections.forEach(s => {
+        const li = document.createElement('li'), a = document.createElement('a');
+        a.href = '#'; a.textContent = s.title;
+        a.addEventListener('click', e => { e.preventDefault(); document.getElementById(s.id)?.scrollIntoView({behavior:'smooth'}); });
+        li.appendChild(a); l.appendChild(li);
     });
+}
 
-    if('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').then(() => console.log('SW ok')).catch(() => {}); }
+async function renderNovelties() {
+    document.getElementById('sidebarContainer').style.display = 'none';
+    document.getElementById('contentArea').innerHTML = `<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>`;
+    await loadNoveltiesData();
+}
+
+async function loadNoveltiesData() {
+    const cd = document.getElementById('novelties-content'), fd = document.getElementById('novelties-footer');
+    if(!cd) return;
+    try {
+        const r = await fetch(NOVELTIES_URL); if(!r.ok) throw new Error();
+        const t = await r.text(); const rows = t.trim().split('\n').filter(l => l.trim());
+        if(rows.length < 2) { cd.innerHTML = '<div class="novelties-empty">📭 Нововведений пока нет</div>'; fd.textContent = 'Проверено: ' + formatTime(new Date()); return; }
+        const active = rows.slice(1).filter(row => { const s = (row.split('\t')[3]||'').trim().toLowerCase(); return s==='актуально'||s==='актуальная'||s==='новое'; });
+        if(!active.length) { cd.innerHTML = '<div class="novelties-empty">✅ Все обработаны.</div>'; fd.textContent = 'Обновлено: ' + formatTime(new Date()); return; }
+        let h = '';
+        active.forEach(row => { const c = row.split('\t'); if(c.length<3) return; h += `<div class="novelty-card"><div class="novelty-date">📅 ${escapeHtml(c[0]?.trim())}</div><div class="novelty-title">${escapeHtml(c[1]?.trim())}</div><div class="novelty-desc">${escapeHtml(c[2]?.trim())}</div><span class="novelty-badge">${escapeHtml(c[3]?.trim()||'Актуально')}</span></div>`; });
+        cd.innerHTML = h; fd.textContent = '🔄 Обновлено: ' + formatTime(new Date());
+    } catch(e) { cd.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки.</div>'; }
+}
+
+async function renderStopZones() {
+    document.getElementById('sidebarContainer').style.display = 'none';
+    document.getElementById('contentArea').innerHTML = `<div class="stopzones-container"><div class="stopzones-header"><i class="fas fa-stop-circle"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>`;
+    await loadStopZonesData();
+}
+
+async function loadStopZonesData() {
+    const cd = document.getElementById('stopzones-content'), fd = document.getElementById('stopzones-footer');
+    if(!cd) return;
+    try {
+        const r = await fetch(STOPZONES_URL); if(!r.ok) throw new Error();
+        const t = await r.text(); const rows = t.trim().split('\n').filter(l => l.trim());
+        if(rows.length < 2) { cd.innerHTML = '<div class="novelties-empty">📭 Стоп-зон нет</div>'; fd.textContent = 'Проверено: ' + formatTime(new Date()); return; }
+        const floors = {}; let cf = null;
+        rows.slice(1).forEach(row => { const c = row.split('\t'); const f = (c[0]||'').trim(), s = (c[1]||'').trim(); if(!f) return; if(f.toLowerCase().includes('этаж')||f.toLowerCase().includes('поддон')) { cf = f; if(!floors[cf]) floors[cf] = {name:f, zones:[]}; } else if(cf) floors[cf].zones.push({zone:f, reason:s||'Стоп размещение'}); });
+        const fk = Object.keys(floors).filter(k => floors[k].zones.length);
+        if(!fk.length) { cd.innerHTML = '<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны.</div>'; fd.textContent = 'Обновлено: ' + formatTime(new Date()); return; }
+        let h = '';
+        fk.forEach(k => { const fl = floors[k]; h += `<div class="stopzone-floor"><div class="stopzone-floor-title">📍 ${escapeHtml(fl.name)}</div><div class="stopzone-list">`; fl.zones.forEach(z => h += `<div class="stopzone-item"><span class="stopzone-zone">${escapeHtml(z.zone)}</span><span class="stopzone-reason">${escapeHtml(z.reason)}</span></div>`); h += '</div></div>'; });
+        cd.innerHTML = h; fd.textContent = '🔄 Обновлено: ' + formatTime(new Date());
+    } catch(e) { cd.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки.</div>'; }
+}
+
+function switchTab(t) {
+    currentTab = t;
+    document.querySelectorAll('.nav-item').forEach(b => { b.classList.remove('active'); if(b.dataset.tab === t) b.classList.add('active'); });
+    if(t === 'regulations') renderRegulations();
+    else if(t === 'novelties') renderNovelties();
+    else if(t === 'stopzones') renderStopZones();
+}
+
+function performSearch() {
+    if(currentTab !== 'regulations') { switchTab('regulations'); setTimeout(performSearch, 300); return; }
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    document.getElementById('noResultsMsg')?.remove();
+    document.querySelectorAll('.card').forEach(c => { c.querySelectorAll('.highlight').forEach(m => { const p = m.parentNode; p.replaceChild(document.createTextNode(m.textContent), m); p.normalize(); }); });
+    if(!q) { document.querySelectorAll('.card').forEach(c => c.style.display = 'block'); return; }
+    let found = false;
+    document.querySelectorAll('.card').forEach(c => { if((c.dataset.fulltext||'').includes(q)) { c.style.display = 'block'; highlightInCard(c, q); found = true; } else c.style.display = 'none'; });
+    if(!found) { const m = document.createElement('div'); m.id = 'noResultsMsg'; m.className = 'note'; m.style.textAlign = 'center'; m.innerHTML = '<i class="fas fa-search-minus"></i> Ничего не найдено.'; document.getElementById('contentArea').appendChild(m); }
+}
+
+function highlightInCard(card, q) {
+    const w = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, { acceptNode: n => ['SCRIPT','STYLE','MARK'].includes(n.parentElement?.tagName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    const nr = [];
+    while(w.nextNode()) { if(w.currentNode.textContent.toLowerCase().includes(q)) nr.push(w.currentNode); }
+    nr.forEach(n => { const s = document.createElement('span'); s.innerHTML = n.textContent.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'), '<mark class="highlight">$1</mark>'); n.parentNode.replaceChild(s, n); });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    switchTab('regulations');
+    document.querySelectorAll('.nav-item').forEach(b => b.addEventListener('click', () => { const t = b.dataset.tab; if(t) switchTab(t); }));
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+    document.getElementById('searchInput').addEventListener('keyup', e => { if(e.key === 'Enter') performSearch(); });
+    let ly = window.scrollY;
+    window.addEventListener('scroll', () => { const cy = window.scrollY, h = document.getElementById('stickyHeader'); if(cy > ly && cy > 80) h.classList.add('hidden'); else h.classList.remove('hidden'); ly = cy; });
+    setInterval(() => { if(currentTab === 'novelties') loadNoveltiesData(); if(currentTab === 'stopzones') loadStopZonesData(); }, 300000);
+});
+
+window.addEventListener('load', () => {
+    setTimeout(() => { const s = document.getElementById('splash-screen'); if(s) { s.classList.add('hidden'); setTimeout(() => s?.remove(), 600); } }, 1500);
+});
+
+if('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => {}); }
 </script>
 </body>
 </html>
