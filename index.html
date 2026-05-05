@@ -10,9 +10,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Магнит Маркет">
-    <link rel="apple-touch-icon" href="1777931118.png">
+    <link rel="apple-touch-icon" href="МАГНИТОТД_1.jpeg">
     <meta name="theme-color" content="#c41e1e">
-    <link rel="apple-touch-startup-image" href="1777931118.png">
     <meta name="mobile-web-app-capable" content="yes">
     
     <!-- Font Awesome -->
@@ -199,6 +198,70 @@
         .nav-item.active { background: #ffe8e8; color: #a01010; }
         .nav-item.active i { color: #a01010; }
 
+        /* === ЭКРАН ЗАГРУЗКИ === */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #c41e1e, #8b0000);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        #splash-screen img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            animation: splashPulse 2s ease-in-out infinite;
+        }
+        @keyframes splashPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        #splash-screen .splash-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: splashFadeIn 1s ease 0.5s forwards;
+        }
+        @keyframes splashFadeIn {
+            to { opacity: 1; }
+        }
+        #splash-screen .splash-loader {
+            width: 60px;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin-top: 24px;
+            overflow: hidden;
+        }
+        #splash-screen .splash-loader-bar {
+            width: 40%;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            animation: splashLoading 1.5s ease-in-out infinite;
+        }
+        @keyframes splashLoading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(250%); }
+        }
+
         /* === СТИЛИ ДЛЯ НОВОВВЕДЕНИЙ === */
         .novelties-container { padding: 0; }
         .novelties-header {
@@ -324,6 +387,15 @@
 </head>
 <body>
 
+<!-- Экран загрузки -->
+<div id="splash-screen">
+    <img src="1777931118.png" alt="Магнит Маркет">
+    <div class="splash-text">МАГНИТ МАРКЕТ</div>
+    <div class="splash-loader">
+        <div class="splash-loader-bar"></div>
+    </div>
+</div>
+
 <!-- Шапка -->
 <header class="sticky-header" id="stickyHeader">
     <div class="header-content">
@@ -343,13 +415,11 @@
 </header>
 
 <div class="container">
-    <!-- Сайдбар (только для регламентов) -->
     <div class="sidebar" id="sidebarContainer">
         <h3><i class="fas fa-list-ul"></i> Содержание</h3>
         <ul id="tableOfContents"></ul>
     </div>
     
-    <!-- Основной контент -->
     <div class="content" id="contentArea"></div>
 </div>
 
@@ -357,7 +427,6 @@
     <i class="fas fa-sync-alt"></i> Версия 1.0 · При обнаружении ошибок сообщите старшему смены
 </footer>
 
-<!-- Нижнее меню -->
 <div class="bottom-nav">
     <button class="nav-item active" data-tab="regulations">
         <i class="fas fa-book-open"></i>
@@ -374,9 +443,6 @@
 </div>
 
 <script>
-    // ==========================================
-    // ДАННЫЕ РЕГЛАМЕНТОВ
-    // ==========================================
     const sections = [
         { id: "welcome", title: "🏠 Введение", content: `<p>Данный регламент описывает требования по размещению и хранению товара на складе Магнит Маркет, с целью увеличения скорости сборки и снижения рисков потери и повреждения товара.</p><p>Товар должен быть расположен по ячейкам хранения так, чтобы в дальнейшем не пришлось изыскивать дополнительных площадей. Рабочее пространство не должно быть захламлено.</p>` },
         { id: "rule-scan-zone", title: "📱 1.1 Сканирование зоны работы", content: `<p><strong>Для начала размещения необходимо:</strong></p><ul><li>Зайти в программу «PickApp»</li><li>Отсканировать зону работы</li><li>Отсканировать штрихкод грузоместа или акта целиком</li></ul>` },
@@ -397,17 +463,11 @@
         { id: "dangerous", title: "☣️ 8. Потенциально опасные товары", content: `<div class="note"><i class="fas fa-skull-crossbones"></i> <strong>Опасные грузы:</strong> правила обращения с ними выдаются руководителем смены.<br><ul><li>Легковоспламеняющиеся жидкости (лаки, растворители)</li><li>Едкие вещества (кислоты, щёлочи)</li><li>Газовые баллончики (спреи, аэрозоли)</li></ul>⚠️ <strong>Запрещено размещение вместе с обычными товарами без спецмаркировки.</strong></div>` }
     ];
 
-    // ==========================================
-    // URL ДЛЯ ЗАГРУЗКИ
-    // ==========================================
     const NOVELTIES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBGkZqupNTmfs7D26nGRV6P0OOLQKHU2iBBhqo2gGChk1jwU88NE3hgeNJyfXwjKTMd8I2vcUg2XmF/pub?gid=0&single=true&output=tsv';
     const STOPZONES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQGpejo0SiGEXZ3pP4rgSGH4rQqpc26z4rXFZ1qDDe1AtDxUNybzWGrrS_InaASlPZKQLXPFFsUzSIs/pub?output=tsv';
 
     let currentTab = 'regulations';
 
-    // ==========================================
-    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-    // ==========================================
     function stripHtml(html) {
         let tmp = document.createElement('div');
         tmp.innerHTML = html;
@@ -420,21 +480,13 @@
     }
 
     function formatTime(date) {
-        return date.toLocaleString('ru-RU', { 
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-        });
+        return date.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
-    // ==========================================
-    // ОТРИСОВКА РЕГЛАМЕНТОВ
-    // ==========================================
     function renderRegulations() {
         const container = document.getElementById('contentArea');
-        const sidebar = document.getElementById('sidebarContainer');
-        sidebar.style.display = 'block';
+        document.getElementById('sidebarContainer').style.display = 'block';
         container.innerHTML = '';
-        
         sections.forEach(section => {
             const card = document.createElement('div');
             card.className = 'card';
@@ -443,7 +495,6 @@
             card.innerHTML = `<h2>${section.title}</h2>${section.content}`;
             container.appendChild(card);
         });
-        
         buildTOC();
     }
 
@@ -455,356 +506,105 @@
             const a = document.createElement('a');
             a.href = '#';
             a.textContent = section.title;
-            a.addEventListener('click', (e) => {
-                e.preventDefault();
-                const el = document.getElementById(section.id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            });
+            a.addEventListener('click', (e) => { e.preventDefault(); document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' }); });
             li.appendChild(a);
             tocList.appendChild(li);
         });
     }
 
-    // ==========================================
-    // ОТРИСОВКА НОВОВВЕДЕНИЙ
-    // ==========================================
     async function renderNovelties() {
-        const container = document.getElementById('contentArea');
-        const sidebar = document.getElementById('sidebarContainer');
-        sidebar.style.display = 'none';
-        
-        container.innerHTML = `
-            <div class="novelties-container">
-                <div class="novelties-header">
-                    <i class="fas fa-newspaper"></i>
-                    <h2>🆕 Нововведения</h2>
-                </div>
-                <p style="color:#666; margin-bottom:1rem;">Актуальные изменения для сотрудников. Обновляется автоматически.</p>
-                <div id="novelties-content">
-                    <div class="novelties-loading">⏳ Загрузка нововведений...</div>
-                </div>
-                <div id="novelties-footer" class="novelties-footer"></div>
-            </div>
-        `;
-        
+        document.getElementById('sidebarContainer').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="novelties-container"><div class="novelties-header"><i class="fas fa-newspaper"></i><h2>🆕 Нововведения</h2></div><p style="color:#666;margin-bottom:1rem;">Актуальные изменения. Обновляется автоматически.</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>`;
         await loadNoveltiesData();
     }
 
     async function loadNoveltiesData() {
-        const contentDiv = document.getElementById('novelties-content');
-        const footerDiv = document.getElementById('novelties-footer');
-        if (!contentDiv) return;
-        
+        const cd = document.getElementById('novelties-content');
+        const fd = document.getElementById('novelties-footer');
+        if (!cd) return;
         try {
-            const response = await fetch(NOVELTIES_URL);
-            if (!response.ok) throw new Error('Ошибка загрузки');
-            
-            const tsvText = await response.text();
-            const rows = tsvText.trim().split('\n').filter(r => r.trim());
-            
-            if (rows.length < 2) {
-                contentDiv.innerHTML = '<div class="novelties-empty">📭 Нововведений пока нет</div>';
-                footerDiv.textContent = 'Проверено: ' + formatTime(new Date());
-                return;
-            }
-            
-            const dataRows = rows.slice(1);
-            
-            // Фильтруем только актуальные
-            const activeRows = dataRows.filter(row => {
-                const cols = row.split('\t');
-                const status = (cols[3] || '').trim().toLowerCase();
-                return status === 'актуально' || status === 'актуальная' || status === 'новое';
-            });
-            
-            if (activeRows.length === 0) {
-                contentDiv.innerHTML = '<div class="novelties-empty">✅ Все нововведения обработаны. Актуальных нет.</div>';
-                footerDiv.textContent = 'Обновлено: ' + formatTime(new Date());
-                return;
-            }
-            
-            let html = '';
-            activeRows.forEach(row => {
-                const cols = row.split('\t');
-                if (cols.length < 3) return;
-                const date = cols[0]?.trim() || '';
-                const title = cols[1]?.trim() || '';
-                const desc = cols[2]?.trim() || '';
-                const status = cols[3]?.trim() || 'Актуально';
-                
-                html += `
-                    <div class="novelty-card">
-                        <div class="novelty-date">📅 ${escapeHtml(date)}</div>
-                        <div class="novelty-title">${escapeHtml(title)}</div>
-                        <div class="novelty-desc">${escapeHtml(desc)}</div>
-                        <span class="novelty-badge">${escapeHtml(status)}</span>
-                    </div>
-                `;
-            });
-            
-            contentDiv.innerHTML = html;
-            footerDiv.textContent = '🔄 Обновлено: ' + formatTime(new Date());
-            
-        } catch (error) {
-            console.error('Ошибка нововведений:', error);
-            contentDiv.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки. Проверьте подключение.</div>';
-            footerDiv.textContent = '';
-        }
+            const r = await fetch(NOVELTIES_URL);
+            if (!r.ok) throw new Error('');
+            const t = await r.text();
+            const rows = t.trim().split('\n').filter(l => l.trim());
+            if (rows.length < 2) { cd.innerHTML = '<div class="novelties-empty">📭 Нововведений пока нет</div>'; fd.textContent = 'Проверено: ' + formatTime(new Date()); return; }
+            const active = rows.slice(1).filter(row => { const s = (row.split('\t')[3]||'').trim().toLowerCase(); return s==='актуально'||s==='актуальная'||s==='новое'; });
+            if (active.length === 0) { cd.innerHTML = '<div class="novelties-empty">✅ Все нововведения обработаны.</div>'; fd.textContent = 'Обновлено: ' + formatTime(new Date()); return; }
+            let h = '';
+            active.forEach(row => { const c = row.split('\t'); if(c.length<3) return; h += `<div class="novelty-card"><div class="novelty-date">📅 ${escapeHtml(c[0]?.trim())}</div><div class="novelty-title">${escapeHtml(c[1]?.trim())}</div><div class="novelty-desc">${escapeHtml(c[2]?.trim())}</div><span class="novelty-badge">${escapeHtml(c[3]?.trim()||'Актуально')}</span></div>`; });
+            cd.innerHTML = h;
+            fd.textContent = '🔄 Обновлено: ' + formatTime(new Date());
+        } catch(e) { cd.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки.</div>'; }
     }
 
-    // ==========================================
-    // ОТРИСОВКА СТОП-ЗОН
-    // ==========================================
     async function renderStopZones() {
-        const container = document.getElementById('contentArea');
-        const sidebar = document.getElementById('sidebarContainer');
-        sidebar.style.display = 'none';
-        
-        container.innerHTML = `
-            <div class="stopzones-container">
-                <div class="stopzones-header">
-                    <i class="fas fa-stop-circle"></i>
-                    <h2>🚫 Стоп-зоны склада</h2>
-                </div>
-                <div class="stopzone-alert">
-                    ⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.
-                </div>
-                <div id="stopzones-content">
-                    <div class="novelties-loading">⏳ Загрузка стоп-зон...</div>
-                </div>
-                <div id="stopzones-footer" class="novelties-footer"></div>
-            </div>
-        `;
-        
+        document.getElementById('sidebarContainer').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="stopzones-container"><div class="stopzones-header"><i class="fas fa-stop-circle"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>`;
         await loadStopZonesData();
     }
 
     async function loadStopZonesData() {
-        const contentDiv = document.getElementById('stopzones-content');
-        const footerDiv = document.getElementById('stopzones-footer');
-        if (!contentDiv) return;
-        
+        const cd = document.getElementById('stopzones-content');
+        const fd = document.getElementById('stopzones-footer');
+        if (!cd) return;
         try {
-            const response = await fetch(STOPZONES_URL);
-            if (!response.ok) throw new Error('Ошибка загрузки');
-            
-            const tsvText = await response.text();
-            const rows = tsvText.trim().split('\n').filter(r => r.trim());
-            
-            if (rows.length < 2) {
-                contentDiv.innerHTML = '<div class="novelties-empty">📭 Стоп-зон нет</div>';
-                footerDiv.textContent = 'Проверено: ' + formatTime(new Date());
-                return;
-            }
-            
-            const dataRows = rows.slice(1);
-            const floors = {};
-            let currentFloor = null;
-            
-            dataRows.forEach(row => {
-                const cols = row.split('\t');
-                const firstCell = (cols[0] || '').trim();
-                const secondCell = (cols[1] || '').trim();
-                
-                if (!firstCell) return;
-                
-                const isFloor = firstCell.toLowerCase().includes('этаж') || 
-                               firstCell.toLowerCase().includes('поддон');
-                
-                if (isFloor) {
-                    currentFloor = firstCell;
-                    if (!floors[currentFloor]) {
-                        floors[currentFloor] = { name: firstCell, zones: [] };
-                    }
-                } else if (currentFloor) {
-                    floors[currentFloor].zones.push({
-                        zone: firstCell,
-                        reason: secondCell || 'Стоп размещение'
-                    });
-                }
-            });
-            
-            const floorKeys = Object.keys(floors).filter(k => floors[k].zones.length > 0);
-            
-            if (floorKeys.length === 0) {
-                contentDiv.innerHTML = '<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны для размещения.</div>';
-                footerDiv.textContent = 'Обновлено: ' + formatTime(new Date());
-                return;
-            }
-            
-            let html = '';
-            floorKeys.forEach(key => {
-                const floor = floors[key];
-                html += `<div class="stopzone-floor">
-                    <div class="stopzone-floor-title">📍 ${escapeHtml(floor.name)}</div>
-                    <div class="stopzone-list">`;
-                
-                floor.zones.forEach(z => {
-                    html += `<div class="stopzone-item">
-                        <span class="stopzone-zone">${escapeHtml(z.zone)}</span>
-                        <span class="stopzone-reason">${escapeHtml(z.reason)}</span>
-                    </div>`;
-                });
-                
-                html += `</div></div>`;
-            });
-            
-            contentDiv.innerHTML = html;
-            footerDiv.textContent = '🔄 Обновлено: ' + formatTime(new Date());
-            
-        } catch (error) {
-            console.error('Ошибка стоп-зон:', error);
-            contentDiv.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки стоп-зон.</div>';
-            footerDiv.textContent = '';
-        }
+            const r = await fetch(STOPZONES_URL);
+            if (!r.ok) throw new Error('');
+            const t = await r.text();
+            const rows = t.trim().split('\n').filter(l => l.trim());
+            if (rows.length < 2) { cd.innerHTML = '<div class="novelties-empty">📭 Стоп-зон нет</div>'; fd.textContent = 'Проверено: ' + formatTime(new Date()); return; }
+            const floors = {}; let cf = null;
+            rows.slice(1).forEach(row => { const c = row.split('\t'); const f = (c[0]||'').trim(); const s = (c[1]||'').trim(); if(!f) return; if(f.toLowerCase().includes('этаж')||f.toLowerCase().includes('поддон')) { cf = f; if(!floors[cf]) floors[cf] = {name:f, zones:[]}; } else if(cf) { floors[cf].zones.push({zone:f, reason:s||'Стоп размещение'}); } });
+            const fk = Object.keys(floors).filter(k => floors[k].zones.length > 0);
+            if (fk.length === 0) { cd.innerHTML = '<div class="novelties-empty" style="color:#2e7d32;">✅ Все зоны доступны.</div>'; fd.textContent = 'Обновлено: ' + formatTime(new Date()); return; }
+            let h = '';
+            fk.forEach(k => { const fl = floors[k]; h += `<div class="stopzone-floor"><div class="stopzone-floor-title">📍 ${escapeHtml(fl.name)}</div><div class="stopzone-list">`; fl.zones.forEach(z => h += `<div class="stopzone-item"><span class="stopzone-zone">${escapeHtml(z.zone)}</span><span class="stopzone-reason">${escapeHtml(z.reason)}</span></div>`); h += '</div></div>'; });
+            cd.innerHTML = h;
+            fd.textContent = '🔄 Обновлено: ' + formatTime(new Date());
+        } catch(e) { cd.innerHTML = '<div class="novelties-error">❌ Ошибка загрузки стоп-зон.</div>'; }
     }
 
-    // ==========================================
-    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
-    // ==========================================
     function switchTab(tabName) {
         currentTab = tabName;
-        
-        // Обновляем активную кнопку
-        document.querySelectorAll('.nav-item').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-tab') === tabName) {
-                btn.classList.add('active');
-            }
-        });
-        
-        // Показываем нужный контент
-        if (tabName === 'regulations') {
-            renderRegulations();
-        } else if (tabName === 'novelties') {
-            renderNovelties();
-        } else if (tabName === 'stopzones') {
-            renderStopZones();
-        }
+        document.querySelectorAll('.nav-item').forEach(b => { b.classList.remove('active'); if(b.getAttribute('data-tab')===tabName) b.classList.add('active'); });
+        if(tabName==='regulations') renderRegulations();
+        else if(tabName==='novelties') renderNovelties();
+        else if(tabName==='stopzones') renderStopZones();
     }
 
-    // ==========================================
-    // ПОИСК (только для регламентов)
-    // ==========================================
     function performSearch() {
-        if (currentTab !== 'regulations') {
-            switchTab('regulations');
-            setTimeout(() => performSearch(), 300);
-            return;
-        }
-        
-        const query = document.getElementById('searchInput').value.trim().toLowerCase();
-        const cards = document.querySelectorAll('.card');
-        const oldMsg = document.getElementById('noResultsMsg');
-        if (oldMsg) oldMsg.remove();
-
-        cards.forEach(card => {
-            card.querySelectorAll('.highlight').forEach(mark => {
-                const parent = mark.parentNode;
-                parent.replaceChild(document.createTextNode(mark.textContent), mark);
-                parent.normalize();
-            });
-        });
-
-        if (!query) {
-            cards.forEach(card => card.style.display = 'block');
-            return;
-        }
-
-        let foundAny = false;
-        cards.forEach(card => {
-            const fullText = card.getAttribute('data-fulltext') || '';
-            if (fullText.includes(query)) {
-                card.style.display = 'block';
-                highlightInCard(card, query);
-                foundAny = true;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        if (!foundAny) {
-            const msg = document.createElement('div');
-            msg.id = 'noResultsMsg';
-            msg.className = 'note';
-            msg.style.textAlign = 'center';
-            msg.innerHTML = '<i class="fas fa-search-minus"></i> Ничего не найдено.';
-            document.getElementById('contentArea').appendChild(msg);
-        }
+        if(currentTab!=='regulations') { switchTab('regulations'); setTimeout(performSearch, 300); return; }
+        const q = document.getElementById('searchInput').value.trim().toLowerCase();
+        document.getElementById('noResultsMsg')?.remove();
+        document.querySelectorAll('.card').forEach(c => { c.querySelectorAll('.highlight').forEach(m => { const p=m.parentNode; p.replaceChild(document.createTextNode(m.textContent),m); p.normalize(); }); });
+        if(!q) { document.querySelectorAll('.card').forEach(c => c.style.display='block'); return; }
+        let found = false;
+        document.querySelectorAll('.card').forEach(c => { if((c.getAttribute('data-fulltext')||'').includes(q)) { c.style.display='block'; highlightInCard(c,q); found=true; } else c.style.display='none'; });
+        if(!found) { const m = document.createElement('div'); m.id='noResultsMsg'; m.className='note'; m.style.textAlign='center'; m.innerHTML='<i class="fas fa-search-minus"></i> Ничего не найдено.'; document.getElementById('contentArea').appendChild(m); }
     }
 
     function highlightInCard(card, query) {
-        const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, {
-            acceptNode: node => {
-                if (node.parentElement?.tagName === 'SCRIPT' || 
-                    node.parentElement?.tagName === 'STYLE' || 
-                    node.parentElement?.tagName === 'MARK') return NodeFilter.FILTER_REJECT;
-                return NodeFilter.FILTER_ACCEPT;
-            }
-        });
-        
-        const nodesToReplace = [];
-        while (walker.nextNode()) {
-            if (walker.currentNode.textContent.toLowerCase().includes(query)) {
-                nodesToReplace.push(walker.currentNode);
-            }
-        }
-        
-        nodesToReplace.forEach(node => {
-            const span = document.createElement('span');
-            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-            span.innerHTML = node.textContent.replace(regex, '<mark class="highlight">$1</mark>');
-            node.parentNode.replaceChild(span, node);
-        });
+        const w = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement?.tagName==='SCRIPT'||n.parentElement?.tagName==='STYLE'||n.parentElement?.tagName==='MARK'?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT });
+        const nr = [];
+        while(w.nextNode()) { if(w.currentNode.textContent.toLowerCase().includes(query)) nr.push(w.currentNode); }
+        nr.forEach(n => { const s = document.createElement('span'); s.innerHTML = n.textContent.replace(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'), '<mark class="highlight">$1</mark>'); n.parentNode.replaceChild(s, n); });
     }
 
-    // ==========================================
-    // ИНИЦИАЛИЗАЦИЯ
-    // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Первая загрузка — регламенты
         switchTab('regulations');
-        
-        // Кнопки нижнего меню
-        document.querySelectorAll('.nav-item').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tab = btn.getAttribute('data-tab');
-                if (tab) switchTab(tab);
-            });
-        });
-        
-        // Поиск
+        document.querySelectorAll('.nav-item').forEach(b => b.addEventListener('click', () => { const t = b.getAttribute('data-tab'); if(t) switchTab(t); }));
         document.getElementById('searchBtn').addEventListener('click', performSearch);
-        document.getElementById('searchInput').addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') performSearch();
-        });
-        
-        // Скрытие шапки при скролле
-        let lastScrollY = window.scrollY;
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-            const header = document.getElementById('stickyHeader');
-            if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                header.classList.add('hidden');
-            } else {
-                header.classList.remove('hidden');
-            }
-            lastScrollY = currentScrollY;
-        });
-        
-        // Автообновление каждые 5 минут
-        setInterval(() => {
-            if (currentTab === 'novelties') loadNoveltiesData();
-            if (currentTab === 'stopzones') loadStopZonesData();
-        }, 5 * 60 * 1000);
+        document.getElementById('searchInput').addEventListener('keyup', e => { if(e.key==='Enter') performSearch(); });
+        let ly = window.scrollY;
+        window.addEventListener('scroll', () => { const cy = window.scrollY; const h = document.getElementById('stickyHeader'); if(cy>ly&&cy>80) h.classList.add('hidden'); else h.classList.remove('hidden'); ly=cy; });
+        setInterval(() => { if(currentTab==='novelties') loadNoveltiesData(); if(currentTab==='stopzones') loadStopZonesData(); }, 300000);
     });
 
-    // Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('SW registered'))
-            .catch(err => console.log('SW error:', err));
-    }
+    window.addEventListener('load', () => {
+        setTimeout(() => { const s = document.getElementById('splash-screen'); if(s) { s.classList.add('hidden'); setTimeout(() => s?.remove(), 600); } }, 1500);
+    });
+
+    if('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').then(() => console.log('SW ok')).catch(() => {}); }
 </script>
 </body>
 </html>
