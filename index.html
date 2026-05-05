@@ -27,20 +27,14 @@
         .search-bar input{flex:1;border:none;padding:.55rem 0;font-size:.85rem;outline:none;background:transparent;color:#333}
         .search-bar button{background:var(--red);border:none;border-radius:60px;padding:.5rem 1.4rem;color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;transition:var(--tr)}
         .search-bar button:hover{background:var(--red-dark)}
-        .container{display:flex;max-width:1300px;margin:1.2rem auto;padding:0 1rem;gap:1.5rem}
-        .sidebar{flex:0 0 260px;background:var(--card);border-radius:var(--radius);padding:1.2rem;box-shadow:var(--shadow);height:fit-content;position:sticky;top:105px;border:1px solid var(--border)}
-        .sidebar h3{font-size:1rem;margin-bottom:1rem;color:var(--red);display:flex;align-items:center;gap:8px;font-weight:700}
-        .sidebar ul{list-style:none}
-        .sidebar li{margin:1px 0}
-        .sidebar a{text-decoration:none;color:var(--text);font-size:.8rem;font-weight:500;padding:7px 12px;display:block;border-radius:10px;transition:var(--tr)}
-        .sidebar a:hover{background:#fff5f5;color:var(--red);padding-left:16px}
-        .content{flex:1;background:var(--card);border-radius:var(--radius);padding:1.5rem 2rem;box-shadow:var(--shadow);min-height:400px;border:1px solid var(--border)}
+        .content{max-width:900px;margin:1.5rem auto;padding:0 1rem}
         .accordion{margin-bottom:8px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#fff;transition:var(--tr)}
         .accordion:hover{box-shadow:0 4px 20px rgba(160,20,20,.05)}
         .accordion-header{display:flex;align-items:center;gap:12px;padding:1rem 1.3rem;cursor:pointer;user-select:none;font-weight:700;font-size:1rem;color:var(--red-dark);background:#fff;transition:var(--tr)}
         .accordion-header:hover{background:#fffafa}
-        .accordion-header i:last-child{margin-left:auto;transition:var(--tr);color:var(--muted);font-size:.85rem}
-        .accordion.open .accordion-header i:last-child{transform:rotate(180deg);color:var(--red)}
+        .accordion-header .acc-icon{font-size:1.3rem;flex-shrink:0}
+        .accordion-header .acc-arrow{margin-left:auto;transition:var(--tr);color:var(--muted);font-size:.85rem}
+        .accordion.open .accordion-header .acc-arrow{transform:rotate(180deg);color:var(--red)}
         .accordion-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1)}
         .accordion.open .accordion-body{max-height:10000px;padding:0 1.3rem 1.2rem}
         .accordion-body ul,.accordion-body ol{margin-left:1.4rem;margin-bottom:.8rem}
@@ -53,7 +47,6 @@
         .badge{display:inline-block;padding:4px 12px;border-radius:30px;font-size:.7rem;font-weight:700;letter-spacing:.4px}
         .badge-red{background:#ffebee;color:var(--red)}
         .badge-green{background:#e8f5e9;color:#2e7d32}
-        .badge-orange{background:#fff3e0;color:#e65100}
         footer{text-align:center;margin:2rem 0 0;font-size:.75rem;color:var(--muted)}
         .bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 -3px 20px rgba(0,0,0,.05);display:flex;justify-content:space-around;padding:8px 10px;border-top:1px solid var(--border);z-index:200;padding-bottom:max(8px,env(safe-area-inset-bottom))}
         .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:10px 18px;border-radius:40px;font-size:.7rem;color:var(--muted);font-weight:600;transition:var(--tr)}
@@ -72,7 +65,6 @@
         .novelties-header i{font-size:1.5rem;color:var(--red)}
         .novelties-header h2{margin:0;color:var(--red-dark);font-size:1.3rem}
         .novelty-card{background:#fffdfd;border-left:5px solid var(--red);border-radius:0 14px 14px 0;padding:1rem 1.2rem;margin-bottom:.8rem}
-        .novelty-card:hover{box-shadow:var(--shadow)}
         .novelty-date{font-size:.75rem;color:var(--red);font-weight:600;margin-bottom:.2rem}
         .novelty-title{font-weight:700;font-size:.95rem;color:var(--red-dark);margin-bottom:.2rem}
         .novelty-desc{font-size:.85rem;color:#555;line-height:1.5}
@@ -88,9 +80,9 @@
         .stopzone-list{padding:.5rem 1rem}
         .stopzone-item{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid #fef0f0;font-size:.82rem}
         .stopzone-item:last-child{border-bottom:none}
-        .stopzone-zone{font-family:'SF Mono','Fira Code',monospace;font-weight:600;color:#333}
+        .stopzone-zone{font-family:monospace;font-weight:600;color:#333}
         .stopzone-reason{color:var(--red);font-weight:600}
-        @media(max-width:800px){.container{flex-direction:column;margin:.4rem}.sidebar{position:static;flex:1}.content{padding:1rem}.header-title{font-size:1.1rem}.photo-gallery img{max-width:100%}}
+        @media(max-width:800px){.header-title{font-size:1.1rem}.photo-gallery img{max-width:100%}}
     </style>
 </head>
 <body>
@@ -107,7 +99,7 @@
             <div class="header-subtitle">Магнит Маркет — регламент размещения и хранения</div>
         </div>
     </div>
-    <div style="margin-top:10px;display:flex;justify-content:flex-end">
+    <div style="margin-top:10px;display:flex;justify-content:center">
         <div class="search-bar">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="Поиск по регламенту...">
@@ -115,11 +107,8 @@
         </div>
     </div>
 </header>
-<div class="container">
-    <div class="sidebar" id="sidebarContainer"><h3><i class="fas fa-compass"></i> Навигация</h3><ul id="tableOfContents"></ul></div>
-    <div class="content" id="contentArea"></div>
-</div>
-<footer>🔄 Версия 2.2 · Магнит Маркет · Вопросы — к старшему смены</footer>
+<div class="content" id="contentArea"></div>
+<footer>🔄 Версия 2.3 · Магнит Маркет · Вопросы — к старшему смены</footer>
 <div class="bottom-nav">
     <button class="nav-item active" data-tab="regulations"><i class="fas fa-clipboard-list"></i><span>Регламент</span></button>
     <button class="nav-item" data-tab="stopzones"><i class="fas fa-octagon"></i><span>Стоп-зоны</span></button>
@@ -154,30 +143,17 @@ function escapeHtml(s){if(!s)return'';return s.replace(/[&<>]/g,function(m){retu
 function formatTime(d){return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
 
 function renderRegulations(){
-    document.getElementById('sidebarContainer').style.display='block';
     var c=document.getElementById('contentArea');c.innerHTML='';
     sectionsData.forEach(function(s){
-        var acc=document.createElement('div');acc.className='accordion open';acc.id=s.id;
+        var acc=document.createElement('div');acc.className='accordion';acc.id=s.id;
         acc.setAttribute('data-fulltext',(s.title+' '+stripHtml(s.content)).toLowerCase());
-        acc.innerHTML='<div class="accordion-header"><span style="font-size:1.3rem">'+s.icon+'</span> '+s.title+' <i class="fas fa-chevron-down"></i></div><div class="accordion-body">'+s.content+'</div>';
+        acc.innerHTML='<div class="accordion-header"><span class="acc-icon">'+s.icon+'</span>'+s.title+'<i class="fas fa-chevron-down acc-arrow"></i></div><div class="accordion-body">'+s.content+'</div>';
         acc.querySelector('.accordion-header').addEventListener('click',function(){this.parentElement.classList.toggle('open')});
         c.appendChild(acc);
-    });
-    buildTOC();
-}
-
-function buildTOC(){
-    var l=document.getElementById('tableOfContents');l.innerHTML='';
-    sectionsData.forEach(function(s){
-        var li=document.createElement('li'),a=document.createElement('a');
-        a.href='#';a.textContent=s.icon+' '+s.title;
-        a.addEventListener('click',function(e){e.preventDefault();var el=document.getElementById(s.id);if(el){el.scrollIntoView({behavior:'smooth'});el.classList.add('open')}});
-        li.appendChild(a);l.appendChild(li);
     });
 }
 
 function renderNovelties(){
-    document.getElementById('sidebarContainer').style.display='none';
     document.getElementById('contentArea').innerHTML='<div><div class="novelties-header"><i class="fas fa-bell"></i><h2>🆕 Нововведения</h2></div><p style="color:var(--muted);margin-bottom:1rem;font-size:.85rem">Для сотрудников · Обновляется автоматически</p><div id="novelties-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="novelties-footer" class="novelties-footer"></div></div>';
     loadNoveltiesData();
 }
@@ -203,7 +179,6 @@ function loadNoveltiesData(){
 }
 
 function renderStopZones(){
-    document.getElementById('sidebarContainer').style.display='none';
     document.getElementById('contentArea').innerHTML='<div><div class="stopzones-header"><i class="fas fa-octagon"></i><h2>🚫 Стоп-зоны склада</h2></div><div class="stopzone-alert">⚠️ <strong>Внимание!</strong> В указанных зонах размещение запрещено.</div><div id="stopzones-content"><div class="novelties-loading">⏳ Загрузка...</div></div><div id="stopzones-footer" class="novelties-footer"></div></div>';
     loadStopZonesData();
 }
@@ -234,7 +209,7 @@ function performSearch(){
     var q=document.getElementById('searchInput').value.trim().toLowerCase();
     document.getElementById('noResultsMsg')?.remove();
     document.querySelectorAll('.accordion').forEach(function(c){c.querySelectorAll('.highlight').forEach(function(m){var p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize()})});
-    if(!q){document.querySelectorAll('.accordion').forEach(function(c){c.style.display='';c.classList.add('open')});return}
+    if(!q){document.querySelectorAll('.accordion').forEach(function(c){c.style.display=''});return}
     var found=false;
     document.querySelectorAll('.accordion').forEach(function(c){
         if((c.dataset.fulltext||'').indexOf(q)!==-1){c.style.display='';c.classList.add('open');highlightInCard(c,q);found=true}else{c.style.display='none'}
